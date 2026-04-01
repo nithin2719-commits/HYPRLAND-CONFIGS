@@ -1,0 +1,6 @@
+    "custom/gpu": {
+        "exec": "bash ~/.config/waybar/scripts/gpu.sh",
+        "format": "{}",
+        "interval": 2,
+        "tooltip": false
+    },

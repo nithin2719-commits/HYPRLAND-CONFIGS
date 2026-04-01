@@ -1,0 +1,6 @@
+    "custom/powerprofile": {
+        "format": "󱐋",
+        "on-click": "bash ~/.config/waybar/scripts/powerprofile_menu.sh",
+        "interval": "once",
+        "tooltip-format": "Power Profile"
+    },

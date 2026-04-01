@@ -1,0 +1,9 @@
+.bash_history
+.zsh_history
+.python_history
+.zcompdump*
+*.bak
+*.bak2
+*.broken
+*.save
+userprefs.confhyprctl
