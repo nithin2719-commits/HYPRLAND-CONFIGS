@@ -3,6 +3,9 @@
 .zsh_history
 .python_history
 .zcompdump*
+.lesshst
+
+# ── local backups made while tweaking the rice ───────────────────────────
 *.bak
 *.bak2
 *.broken
