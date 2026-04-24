@@ -7,6 +7,7 @@
 
 # ── local backups made while tweaking the rice ───────────────────────────
 *.bak
+*.bak-*
 *.bak2
 *.broken
 *.save
