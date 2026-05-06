@@ -1,7 +1,8 @@
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"#
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"
+
 # ~/.bashrc
 #
 
@@ -11,3 +12,6 @@ eval "$(pyenv virtualenv-init -)"#
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 PS1='[\u@\h \W]\$ '
+
+. "$HOME/.local/share/../bin/env"
+Welcome hacker 😎

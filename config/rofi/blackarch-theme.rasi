@@ -1,0 +1,112 @@
+* {
+    bg:          #050505;
+    bg-alt:      #0d0000;
+    fg:          #ff0000;
+    fg-alt:      #cc2200;
+    fg-dim:      #661100;
+    border:      #ff0000;
+    select-bg:   #1a0000;
+    select-fg:   #ff4444;
+    font:        "JetBrainsMono Nerd Font Bold 11";
+}
+
+window {
+    transparency:        "real";
+    background-color:    @bg;
+    border:              1px;
+    border-color:        @border;
+    border-radius:       8px;
+    width:               260px;
+    location:            northwest;
+    anchor:              northwest;
+    x-offset:            0px;
+    y-offset:            0px;
+    padding:             0px;
+}
+
+mainbox {
+    background-color:    transparent;
+    children:            [ "inputbar", "message", "listview" ];
+    spacing:             0px;
+}
+
+inputbar {
+    background-color:    #1a0000;
+    border-radius:       8px 8px 0px 0px;
+    border:              0px 0px 1px 0px;
+    border-color:        @border;
+    padding:             8px 12px;
+    children:            [ "prompt", "entry" ];
+}
+
+prompt {
+    background-color:    transparent;
+    text-color:          @fg;
+    padding:             0px 8px 0px 0px;
+}
+
+entry {
+    background-color:    transparent;
+    text-color:          @fg-alt;
+    placeholder:         "search...";
+    placeholder-color:   @fg-dim;
+}
+
+message {
+    background-color:    #0a0000;
+    border:              0px 0px 1px 0px;
+    border-color:        #220000;
+    padding:             4px 12px;
+}
+
+textbox {
+    background-color:    transparent;
+    text-color:          #ff4400;
+    font:                "JetBrainsMono Nerd Font 9";
+}
+
+listview {
+    background-color:    transparent;
+    columns:             1;
+    lines:               8;
+    spacing:             2px;
+    padding:             6px;
+    scrollbar:           false;
+    fixed-height:        false;
+}
+
+element {
+    background-color:    transparent;
+    border-radius:       4px;
+    padding:             7px 12px;
+    cursor:              pointer;
+    spacing:             8px;
+}
+
+element normal.normal {
+    background-color:    transparent;
+    text-color:          @fg-alt;
+}
+
+element alternate.normal {
+    background-color:    #0a0000;
+    text-color:          @fg-alt;
+}
+
+element selected.normal {
+    background-color:    @select-bg;
+    text-color:          @select-fg;
+    border:              1px;
+    border-color:        @border;
+}
+
+element-icon {
+    size:                20px;
+    background-color:    transparent;
+}
+
+element-text {
+    background-color:    transparent;
+    text-color:          inherit;
+    vertical-align:      0.5;
+}
