@@ -1,0 +1,16 @@
+[Presets]
+lastLoadedOutputPreset=Bass Enhancing + Perfect EQ
+
+[StreamInputs]
+inputDevice=alsa_input.pci-0000_00_1f.3.analog-stereo
+
+[StreamOutputs]
+mostUsedPresets=Laptop,Advanced Auto Gain,Bass Enhancing + Perfect EQ,Perfect EQ,Bass Boosted
+outputDevice=alsa_output.pci-0000_00_1f.3.analog-stereo
+plugins=equalizer#0,convolver#0
+pluginsListWidth=288
+usedPresets=Laptop:15,Bass Enhancing + Perfect EQ:7,Advanced Auto Gain:12,Perfect EQ:6,Loudness+Autogain:5,Boosted:5,Bass Enhancing + Perfect EQ - Low Latency:3,Bass Boosted:5
+
+[Window]
+height=675
+width=1258

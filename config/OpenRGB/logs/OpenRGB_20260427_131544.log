@@ -1,0 +1,61 @@
+    OpenRGB v0.9+ (1.0rc2)
+    Commit:  from 
+    Launched: 20260427_131544
+====================================================================================================
+
+56    |Info:    [ResourceManager] Initializing HID interfaces: Success
+56    |Info:    ------------------------------------------------------
+56    |Info:    |               Start device detection               |
+56    |Info:    ------------------------------------------------------
+63    |Info:    ------------------------------------------------------
+63    |Info:    |             Detecting I2C interfaces               |
+63    |Info:    ------------------------------------------------------
+64    |Info:    [ResourceManager] Registering I2C interface: /dev/i2c-3 Device 8086:46A6 Subsystem: 1043:1C92
+64    |Info:    [ResourceManager] Registering I2C interface: /dev/i2c-10 Device 8086:46A6 Subsystem: 1043:1C92
+64    |Info:    [ResourceManager] Registering I2C interface: /dev/i2c-1 Device 0000:0000 Subsystem: 0000:0000
+64    |Info:    [ResourceManager] Registering I2C interface: /dev/i2c-NXP3001:00 Device 0000:0000 Subsystem: 0000:0000
+64    |Info:    [ResourceManager] Registering I2C interface: /dev/i2c-17 Device 8086:51A3 Subsystem: 1043:1C92
+64    |Info:    [ResourceManager] Registering I2C interface: /dev/i2c-8 Device 8086:46A6 Subsystem: 1043:1C92
+64    |Info:    [ResourceManager] Registering I2C interface: /dev/i2c-ASUE1403:00 Device 0000:0000 Subsystem: 0000:0000
+64    |Warning: [i2c_smbus_linux] Failed to read i2c device PCI device ID
+64    |Info:    [ResourceManager] Registering I2C interface: /dev/i2c-15 Device 0000:0000 Subsystem: 0000:0000
+64    |Info:    [ResourceManager] Registering I2C interface: /dev/i2c-6 Device 8086:46A6 Subsystem: 1043:1C92
+64    |Info:    [ResourceManager] Registering I2C interface: /dev/i2c-13 Device 10DE:24A0 Subsystem: 1043:1C92
+64    |Info:    [ResourceManager] Registering I2C interface: /dev/i2c-4 Device 8086:46A6 Subsystem: 1043:1C92
+65    |Info:    [ResourceManager] Registering I2C interface: /dev/i2c-11 Device 10DE:24A0 Subsystem: 1043:1C92
+65    |Info:    [ResourceManager] Registering I2C interface: /dev/i2c-2 Device 8086:46A6 Subsystem: 1043:1C92
+65    |Info:    [ResourceManager] Registering I2C interface: /dev/i2c-0 Device 0000:0000 Subsystem: 0000:0000
+65    |Info:    [ResourceManager] Registering I2C interface: /dev/i2c-9 Device 8086:46A6 Subsystem: 1043:1C92
+65    |Warning: [i2c_smbus_linux] Failed to read i2c device PCI device ID
+65    |Info:    [ResourceManager] Registering I2C interface: /dev/i2c-16 Device 0000:0000 Subsystem: 0000:0000
+65    |Info:    [ResourceManager] Registering I2C interface: /dev/i2c-7 Device 8086:46A6 Subsystem: 1043:1C92
+65    |Info:    [ResourceManager] Registering I2C interface: /dev/i2c-14 Device 10DE:24A0 Subsystem: 1043:1C92
+65    |Info:    [ResourceManager] Registering I2C interface: /dev/i2c-5 Device 8086:46A6 Subsystem: 1043:1C92
+65    |Info:    [ResourceManager] Registering I2C interface: /dev/i2c-12 Device 10DE:24A0 Subsystem: 1043:1C92
+65    |Info:    ------------------------------------------------------
+65    |Info:    |               Detecting I2C devices                |
+65    |Info:    ------------------------------------------------------
+116   |Info:    ------------------------------------------------------
+116   |Info:    |            Detecting I2C DIMM modules              |
+116   |Info:    ------------------------------------------------------
+116   |Info:    ------------------------------------------------------
+116   |Info:    |               Detecting I2C PCI devices            |
+116   |Info:    ------------------------------------------------------
+117   |Info:    ------------------------------------------------------
+117   |Info:    |               Detecting HID devices                |
+117   |Info:    ------------------------------------------------------
+151   |Info:    [KLM] Created new Seventy Five percent ANSI QWERTY with 6 rows and 14 columns containing 74 keys
+151   |Info:    [KLM] Created new KLMempty  with 0 rows and 0 columns containing 0 keys
+151   |Info:    [KLM] Created new KLMempty  with 0 rows and 0 columns containing 0 keys
+151   |Info:    [G533ZW] Registering RGB controller
+151   |Info:    ------------------------------------------------------
+151   |Info:    |            Detecting libusb HID devices            |
+151   |Info:    ------------------------------------------------------
+180   |Info:    ------------------------------------------------------
+180   |Info:    |              Detecting other devices               |
+180   |Info:    ------------------------------------------------------
+200   |Info:    [ResourceManager] Calling Post-detection callbacks
+200   |Info:    ------------------------------------------------------
+200   |Info:    |                Detection completed                 |
+200   |Info:    ------------------------------------------------------
+200   |Dialog:  <h2>Some internal devices may not be detected:</h2><p>One or more I2C or SMBus interfaces failed to initialize.</p><p><b>RGB DRAM modules, some motherboards' onboard RGB lighting, and RGB Graphics Cards, will not be available in OpenRGB</b> without I2C or SMBus.</p><h4>How to fix this:</h4><p>On Linux, this is usually because the i2c-dev module is not loaded.</p><p>You must load the i2c-dev module along with the correct i2c driver for your motherboard. This is usually i2c-piix4 for AMD systems and i2c-i801 for Intel systems.</p><p>See <a href='https://help.openrgb.org/'>help.openrgb.org</a> for additional troubleshooting steps if you keep seeing this message.<br></p><h3>If you are not using internal RGB on a desktop this message is not important to you.</h3>

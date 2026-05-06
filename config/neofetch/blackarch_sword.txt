@@ -1,0 +1,15 @@
+   00                    nithin@archlinux 
+                   11                    ---------------- 
+                  ====                   +//ooo+:               WM: sway 
+            `/+++++//+++++:              Terminal: kitty 
+           `/++++++//++++++:             CPU: 12th Gen Intel i9-12900H ( 
+          `/+++oooo//ooooooo/`           Memory: 3800MiB / 31745MiB 
+         ./ooosssso//osssssso+`
+        .oossssso-`//`/ossssss+`
+       -osssssso.  //  :ssssssso.
+      :osssssss/   //   osssso+++.
+     /ossssssss/   //   +ssssooo/-
+   `/ossssso+/:-   //   -:/+osssso+-
+  `+sso+:-`        //       `.-/+oso:
+ `++:.             //            `-/+/
+ .`                /                `/

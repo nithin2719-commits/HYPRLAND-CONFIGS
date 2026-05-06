@@ -1,38 +1,27 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+
+zmodload zsh/zprof
 
 export PATH="/usr/bin:$PATH"
 # Oh-my-zsh installation path
-ZSH=/usr/share/oh-my-zsh/
 
 # Powerlevel10k theme path
 source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 
 # List of plugins used
-plugins=( git sudo zsh-256color zsh-autosuggestions zsh-syntax-highlighting )
-source $ZSH/oh-my-zsh.sh
 
 # In case a command is not found, try to find the package that has it
-function command_not_found_handler {
-    local purple='\e[1;35m' bright='\e[0;1m' green='\e[1;32m' reset='\e[0m'
-    printf 'zsh: command not found: %s\n' "$1"
-    local entries=( ${(f)"$(/usr/bin/pacman -F --machinereadable -- "/usr/bin/$1")"} )
-    if (( ${#entries[@]} )) ; then
-        printf "${bright}$1${reset} may be found in the following packages:\n"
-        local pkg
-        for entry in "${entries[@]}" ; do
-            local fields=( ${(0)entry} )
-            if [[ "$pkg" != "${fields[2]}" ]]; then
-                printf "${purple}%s/${bright}%s ${green}%s${reset}\n" "${fields[1]}" "${fields[2]}" "${fields[3]}"
-            fi
-            printf '    /%s\n' "${fields[4]}"            pkg="${fields[2]}"
-        done
-    fi
-    return 127
-}
 
 # Detect AUR wrapper
-if pacman -Qi yay &>/dev/null; then
+if command -v yay &>/dev/null; then
    aurhelper="yay"
-elif pacman -Qi paru &>/dev/null; then
+elif command -v paru &>/dev/null; then
    aurhelper="paru"
 fi
 
@@ -87,15 +76,11 @@ alias mkdir='mkdir -p'
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Display Pokemon
-pokemon-colorscripts --no-title -r 1,3,6
-eval "$(starship init zsh)"
 
 export PATH=$PATH:/home/nithin/.spicetify
-eval "$(starship init zsh)"
 export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/shims:$PATH"
 export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
 
 
 # Created by `pipx` on 2026-03-21 18:50:45
@@ -105,10 +90,70 @@ export PATH="$PATH:/home/nithin/.local/bin:/home/nithin/.local/share/gem/ruby/3.
 if [ -z "$DISPLAY" ] && [ "$XDG_VTNR" = "1" ]; then
     exec Hyprland
 fi
-ZSH_HIGHLIGHT_STYLES[unknown-token]="fg=default"
-ZSH_HIGHLIGHT_STYLES[double-quoted-argument]="fg=default"
-ZSH_HIGHLIGHT_STYLES[unknown-token]="fg=cyan"
 
+# Fast plugin loading (no OMZ)
+source /usr/share/oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+typeset -A ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[unknown-token]="fg=cyan"
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]="fg=default"
+pokemon-colorscripts --no-title -r 1,3,6
+# Lazy load nvm
 export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+nvm() {
+  unset -f nvm
+  [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+  nvm "$@"
+}
+TIMEFMT="%J  %*E total"
+# 🔥 enable arrow key history
+plugins=(zsh-autosuggestions)
+# 🔥 search history with arrows (partial match)
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+
+# 🔥 enable history search (correct way)
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+
+
+# 🔥 smart history search (like you want)
+
+autoload -Uz up-line-or-beginning-search
+autoload -Uz down-line-or-beginning-search
+
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+
+# arrow keys = search matching history
+
+# History
+setopt HIST_IGNORE_DUPS
+setopt SHARE_HISTORY
+
+# Arrow key bindings
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt HIST_IGNORE_DUPS
+setopt SHARE_HISTORY
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey "^[[A" up-line-or-beginning-search
+bindkey "^[[B" down-line-or-beginning-search
+export PATH="$HOME/.pyenv/versions/3.10.14/bin:$PATH"
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/versions/3.10.14/bin:$PATH"
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/shims:$PYENV_ROOT/versions/3.10.14/bin:$PATH"
+export PATH="$HOME/.npm-global/bin:$PATH"

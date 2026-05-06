@@ -1,0 +1,33 @@
+swipe:
+  3:
+    left:
+      command: 'hyprctl dispatch killactive'
+    right:
+      command: 'hyprctl dispatch killactive'
+    up:
+      command: 'hyprctl dispatch fullscreen 1'
+    down:
+      command: 'bash ~/.local/share/bin/showdesktop.sh'
+  4:
+    up:
+      command: 'google-chrome-stable --app=https://youtube.com'
+    down:
+      command: 'code'
+    left:
+      command: '/home/nithin/Applications/Claude-linux-x64/Claude'
+    right:
+      command: 'google-chrome-stable --app=https://web.whatsapp.com'
+hold:
+  3:
+    command: 'bash -c "hyprctl clients -j | jq -r \".[].address\" | xargs -I{} hyprctl dispatch closewindow address:{}"'
+  4:
+    command: 'grimblast save area ~/Pictures/Screenshots/$(date +%Y%m%d_%H%M%S).png'
+threshold:
+  swipe: 0.05
+  hold: 0.8
+pinch:
+  2:
+    in:
+      command: 'wtype -M ctrl -k minus -m ctrl'
+    out:
+      command: 'wtype -M ctrl -k equal -m ctrl'
