@@ -1,0 +1,250 @@
+// Graphite bar — waybar, matched to ~/.config/dunst/dunstrc.
+//
+// Standalone on purpose. HyDE regenerates ~/.config/waybar/config.jsonc from
+// config.ctl every time you switch bars or themes, so anything designed there
+// is temporary. This file is never touched by that machinery, and the HyDE bar
+// stays intact as a fallback:  waybar   (no args) brings the old one back.
+//
+// Launched by the watchdog, which forwards its arguments:
+//   waybar-watchdog.sh -c ~/.config/waybar/graphite/config.jsonc \
+//                      -s ~/.config/waybar/graphite/style.css
+//
+// Shape: a transparent bar carrying separate "chips", each one a small
+// graphite card — the same surface as a notification, so the desktop reads as
+// one system. Blur comes from a layerrule on namespace `waybar`.
+{
+    "layer": "top",
+    "position": "top",
+    "height": 38,
+    "spacing": 0,
+    "margin-top": 6,
+    "margin-left": 10,
+    "margin-right": 10,
+    "reload_style_on_change": true,
+
+    // The clock is ALONE in the centre. Anything sharing modules-center is
+    // centred as a group, so the song chip beside it pushed the time off to the
+    // right — it only looked centred when nothing was playing.
+    // The song sits on the RIGHT now: launcher + workspaces + window + song
+    // made the left half carry four chips while the right carried one island.
+    "modules-left":   ["custom/launcher", "hyprland/workspaces", "hyprland/window"],
+    "modules-center": ["clock"],
+    "modules-right":  ["custom/song", "group/status"],
+
+    // Ten separate chips read as clutter — each one drew its own frame, so the
+    // right half of the bar was a row of boxes competing for attention. They
+    // are now ONE island with dividers inside it: same information, a third of
+    // the visual weight.
+    "group/status": {
+        "orientation": "horizontal",
+        "modules": ["cpu", "memory", "custom/gpuinfo",
+                    "network", "bluetooth", "pulseaudio",
+                    "battery", "custom/notifications", "tray", "custom/power"]
+    },
+
+    // ---- left ----------------------------------------------------------
+    "custom/launcher": {
+        "format": "󰣇",
+        "on-click": "~/.config/blackarch-launcher/launch.sh",
+        "on-click-right": "rofi -show drun -theme ~/.config/rofi/graphite.rasi",
+        "tooltip": true,
+        "tooltip-format": "left: BlackArch toolbox\nright: all apps"
+    },
+
+    // Which workspace you are on, as NUMBERS with the active one inverted.
+    //
+    // The dots this replaced could not answer "where am I?" — a wide dash among
+    // round dots is a difference you have to look for, and it never said WHICH
+    // workspace, only that one of five was current. A number in a filled white
+    // pill is unambiguous from across the room.
+    "hyprland/workspaces": {
+        "format": "{id}",
+        "persistent-workspaces": { "*": 5 },
+        "on-click": "activate",
+        "on-scroll-up": "hyprctl dispatch workspace e+1",
+        "on-scroll-down": "hyprctl dispatch workspace e-1",
+        "tooltip": false
+    },
+
+    "hyprland/window": {
+        "format": "{title}",
+        "max-length": 30,   // the left group also carries the song chip; 46 squeezed
+                            // the title down to "Fix sidew…" once both were present
+        "separate-outputs": true,
+        // The class alone is noise once you can see the window; the title is
+        // what tells you which of six terminals is focused.
+        "rewrite": {
+            "(.*) — Mozilla Firefox": "󰈹  $1",
+            "(.*) - Chromium": "󰊯  $1",
+            "(.*) - Visual Studio Code": "󰨞  $1",
+            "(.*) - Code - OSS": "󰨞  $1",
+            "BlackArch :: (.*)": "󰣇  $1",
+            "^$": "󰇄  desktop"
+        },
+        "tooltip": false
+    },
+
+    // Now playing, with a record that actually turns while the music plays.
+    //
+    // No "interval": song-spin.sh runs continuously and streams a JSON line per
+    // frame, which is the only way to animate here — GTK3 CSS has no transform,
+    // so a glyph cannot be rotated from the stylesheet.
+    "custom/song": {
+        "exec": "song-spin.sh",
+        "return-type": "json",
+        "format": "{}",
+        "escape": false,
+        "tooltip": true,
+        "on-click": "playerctl play-pause",
+        "on-click-right": "playerctl next",
+        "on-click-middle": "playerctl previous",
+        "on-scroll-up": "playerctl position 5+",
+        "on-scroll-down": "playerctl position 5-"
+    },
+
+    // ---- centre --------------------------------------------------------
+    // Time is the one thing read most often, so it is the brightest text on
+    // the bar; the date trails it in faint grey, present but never competing.
+    "clock": {
+        "interval": 1,
+        // Explicit {0:...} on BOTH fields. With automatic indexing the second
+        // {} asks fmt for a second argument, which the clock module does not
+        // pass — the format throws and the chip renders completely empty.
+        "format": "<span foreground='#e6e6ea'>{0:%H:%M}</span>  <span foreground='#6e6e78'>{0:%a %d %b}</span>",
+                // No calendar in the tooltip: the GTK app is the calendar now, and the
+        // tooltip version rendered "today" in the theme's blue, the one
+        // coloured thing left on the desktop.
+        "tooltip": false,
+        // Click opens the real calendar. It used to toggle seconds on and off,
+        // and the month lived only in the hover tooltip — so pressing the date
+        // showed no calendar at all.
+        // The GTK app, not the rofi list: rofi can only ever be a flat menu, so
+        // "the 14th of next March" meant paging month by month through rows.
+        // Left click: the eww dashboard (calendar + todo + music player).
+        // Right click still opens the old GTK calendar app.
+        "on-click": "~/.config/eww/scripts/toggle.sh",
+        "on-click-right": "cal-toggle.sh"
+    },
+
+    // ---- right: usage --------------------------------------------------
+    "cpu": {
+        "interval": 3,
+        "format": "󰻠 {usage}%",
+        "tooltip": true,
+        "tooltip-format": "CPU Usage: {usage}%",
+        "on-click": "kitty -e btop"
+    },
+
+    "memory": {
+        "interval": 5,
+        "format": "󰍛 {percentage}%",
+        "tooltip": true,
+        "tooltip-format": "RAM: {percentage}%\nUsed: {used}GiB / {total}GiB",
+        "states": { "warning": 75, "critical": 90 },
+        "on-click": "kitty -e btop"
+    },
+
+    // HyDE's script, reused: it already reports the 3070 Ti's temperature and
+    // utilisation, and rewriting nvidia-smi parsing would gain nothing.
+    "custom/gpuinfo": {
+        "exec": "gpuinfo.sh",
+        "return-type": "json",
+        "format": "{}",
+        "interval": 5,
+        "tooltip": true,
+        // btop, not nvtop: nvtop is not installed, so this click did nothing at
+        // all. btop is present and reports the GPU too.
+        "on-click": "kitty -e btop"
+    },
+
+    // ---- right: radios & sound -----------------------------------------
+    "bluetooth": {
+        "format": "󰂲",
+        "format-on": "󰂯",
+        "format-connected": "󰂱",
+        "format-connected-battery": "󰂱 {device_battery_percentage}%",
+        "tooltip-format": "{controller_alias}\n{status}",
+        "tooltip-format-connected": "{controller_alias}\n{num_connections} connected\n\n{device_enumerate}",
+        "tooltip-format-enumerate-connected": "{device_alias}",
+        // Same rofi surface as the wifi chip. Opening blueman-manager here made
+        // two neighbouring icons behave like they came from different desktops:
+        // one dropped a small menu under the bar, the other threw a full GTK
+        // window on screen. blueman is still the last row of the menu.
+        "on-click": "bt-menu.sh",
+        "on-click-right": "blueman-manager"
+    },
+
+    "network": {
+        "interval": 5,
+        "format-wifi": "{icon}",
+        "format-icons": ["󰤟", "󰤢", "󰤥", "󰤨"],
+        "format-ethernet": "󰈀",
+        "format-linked": "󰈀",
+        "format-disconnected": "󰤭",
+        "tooltip-format-wifi": "{essid}  ·  {signalStrength}%\n{ipaddr}\n󰇚 {bandwidthDownBits}   󰕒 {bandwidthUpBits}",
+        "tooltip-format-ethernet": "{ifname}\n{ipaddr}",
+        "tooltip-format-disconnected": "offline",
+        // `kitty -e nmtui` was the wrong tool for a click: it opened a tiny
+        // terminal whose FIRST screen is a menu, not a network list, so a click
+        // on the wifi icon looked like it offered nothing to connect to.
+        // wifi-menu.sh lists real networks in the bar's own rofi surface.
+        "on-click": "wifi-menu.sh",
+        "on-click-right": "nm-connection-editor"
+    },
+
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": "󰝟",
+        "format-icons": { "headphone": "󰋋", "headset": "󰋎",
+                          "default": ["󰕿", "󰖀", "󰕾"] },
+        "scroll-step": 5,
+        // pavucontrol is a MIXER, not a volume control — a full window with
+        // tabs and per-app streams for what is a two-click job. vol-menu.sh
+        // is the same small surface as the wifi and bluetooth menus; the
+        // mixer is still one right-click away.
+        // No menu on click. A list of preset levels was a box in the way of a
+        // one-bit decision — scrolling the chip already sets the level, so the
+        // click is now just mute. The full mixer stays on right-click.
+        "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+        "on-click-right": "pavucontrol",
+        "tooltip-format": "{desc}  ·  {volume}%"
+    },
+
+    // ---- right: power & status -----------------------------------------
+    "battery": {
+        "interval": 10,
+        "states": { "warning": 25, "critical": 12 },
+        "format": "{icon} {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-plugged": "󰚥 {capacity}%",
+        "format-icons": ["󰁺","󰁻","󰁼","󰁽","󰁾","󰁿","󰂀","󰂁","󰂂","󰁹"],
+        "tooltip-format": "{timeTo}  ·  {power:0.1f}W"
+    },
+
+    // Same script the notification cards are themed with: monochrome glyph,
+    // state carried by a CSS class rather than colour baked into the icon.
+    "custom/notifications": {
+        "exec": "notif-graphite-dunst.sh",
+        "exec-if": "which dunstctl",
+        "return-type": "json",
+        "format": "{}",
+        "interval": 2,
+        "escape": false,
+        "tooltip": true,
+        "on-click": "notif-center.sh",
+        "on-click-right": "dunstctl set-paused toggle",
+        "on-click-middle": "dunstctl history-clear"
+    },
+
+    "tray": {
+        "icon-size": 15,
+        "spacing": 10,
+        "show-passive-items": true
+    },
+
+    "custom/power": {
+        "format": "󰐥",
+        "on-click": "logoutlaunch.sh",
+        "tooltip": false
+    }
+}
