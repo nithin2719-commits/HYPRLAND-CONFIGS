@@ -11,20 +11,6 @@
     "custom/notifications": {
         "format": "{}",
         "rotate": ${r_deg},
-        "format-icons": {
-            "email-notification": "<span foreground='white'><sup></sup></span>",
-            "chat-notification": "󱋊<span foreground='white'><sup></sup></span>",
-            "warning-notification": "󱨪<span foreground='yellow'><sup></sup></span>",
-            "error-notification": "󱨪<span foreground='red'><sup></sup></span>",
-            "network-notification": "󱂇<span foreground='white'><sup></sup></span>",
-            "battery-notification": "󰁺<span foreground='white'><sup></sup></span>",
-            "update-notification": "󰚰<span foreground='white'><sup></sup></span>",
-            "music-notification": "󰝚<span foreground='white'><sup></sup></span>",
-            "volume-notification": "󰕿<span foreground='white'><sup></sup></span>",
-            "notification": "<span foreground='white'><sup></sup></span>",
-            "dnd": "",
-            "none": ""
-        },
         "return-type": "json",
         "exec-if": "which dunstctl",
         "exec": "notifications.py",
