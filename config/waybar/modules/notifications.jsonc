@@ -13,7 +13,7 @@
         "rotate": ${r_deg},
         "return-type": "json",
         "exec-if": "which dunstctl",
-        "exec": "notifications.py",
+        "exec": "notif-graphite.py",
         "on-scroll-down": "sleep 0.1 && dunstctl history-pop",
         "on-click": "dunstctl set-paused toggle",
         "on-click-middle": "dunstctl history-clear",
