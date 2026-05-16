@@ -1,0 +1,317 @@
+/* Graphite bar — waybar styling, matched to ~/.config/dunst/dunstrc.
+ *
+ *   glass #121216  chip base (≈85%, Hyprland blurs behind it)
+ *   edge  #3a3a42  hairline        bone  #ededf0  primary text
+ *   dim   #b6b6c0  secondary       faint #7d7d87  idle / labels
+ *
+ * The bar window itself is transparent: what you see are separate chips, the
+ * same surface as a notification card. Nothing here uses hue — hierarchy is
+ * brightness and shape only, and the two "alarm" states (critical battery,
+ * critical memory) earn attention by pulsing rather than by turning red.
+ */
+
+* {
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 12px;
+    font-weight: 500;
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+    /* GTK draws a 1px shadow under every widget by default; on a transparent
+       bar that reads as grime around each chip. */
+    box-shadow: none;
+    text-shadow: none;
+}
+
+window#waybar {
+    background: transparent;
+}
+
+tooltip {
+    background: rgba(22, 22, 25, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    color: #ededf0;
+}
+
+tooltip label {
+    color: #ededf0;
+    padding: 2px;
+}
+
+/* ---- the chip ---------------------------------------------------------
+ * One shared surface for every module, so spacing and weight stay identical
+ * across the bar. Margins are what separate the chips; padding is what keeps
+ * their contents off the edges. */
+#custom-launcher,
+#workspaces,
+#window,
+#custom-song,
+#clock,
+#status {
+    background: rgba(20, 20, 23, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    color: #b6b6c0;
+    /* One rhythm for the whole bar: 5px above and below every chip (so each is
+       28px tall inside a 38px bar and optically centred), 4px between chips,
+       and horizontal padding always a multiple of that 4 — 12 for text chips,
+       adjusted per chip below only where the content needs it. Mixed 3/4px
+       margins and 12/14/16px paddings were what made the bar read as unevenly
+       spaced rather than deliberately laid out. */
+    padding: 0 12px;
+    margin: 5px 4px;
+    transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+
+/* The outermost chips sit flush with the bar's own 10px side margins. */
+#custom-launcher { margin-left: 0; }
+#status { margin-right: 0; padding: 0 4px; }
+
+/* Modules INSIDE the status island carry no frame of their own — the island is
+   the card. Ten framed chips in a row was the "bloated" look; this is one
+   surface with contents.
+ *
+ * Dock magnification: padding and min-width are animatable in GTK3, so a
+ * hovered item grows and physically pushes its neighbours aside — the same
+ * cause-and-effect as the macOS dock. (A real scale() is impossible: GTK3 CSS
+ * has no transform, which is also why the record spins from a script.) The
+ * curve is a soft overshoot rather than plain ease, which is what makes it feel
+ * like weight moving instead of a size swap. */
+#status > widget > * {
+    background: transparent;
+    border: none;
+    padding: 0 9px;
+    margin: 0;
+    transition: padding 220ms cubic-bezier(0.2, 0.9, 0.25, 1.15),
+                color 180ms ease,
+                background 180ms ease;
+}
+
+#status > widget > *:hover {
+    padding: 0 16px;
+    background: rgba(255, 255, 255, 0.09);
+    border-radius: 9px;
+}
+
+/* Two hairline dividers group the island into what it actually is: machine
+   load | radios and sound | power and status. */
+#network,
+#battery {
+    border-left: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* Hover answers the pointer per item, not per chip — the island stays put. */
+#cpu:hover,
+#memory:hover,
+#custom-gpuinfo:hover,
+#bluetooth:hover,
+#network:hover,
+#pulseaudio:hover,
+#battery:hover,
+#custom-notifications:hover,
+#custom-power:hover {
+    color: #ffffff;
+}
+
+#clock:hover,
+#workspaces:hover {
+    background: rgba(255, 255, 255, 0.10);
+    border-color: #61616b;
+    color: #ededf0;
+}
+
+/* ---- left: launcher ---------------------------------------------------- */
+#custom-launcher {
+    color: #b6b6c0;
+    font-size: 14px;
+    padding: 0 16px;
+}
+
+#custom-launcher:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.10);
+}
+
+/* ---- left: workspaces -------------------------------------------------
+ * Numbers, and the current one is INVERTED — white pill, dark number. This is
+ * the one place on the desktop where the monochrome scale flips, which is
+ * exactly why it answers "where am I?" instantly. */
+#workspaces {
+    padding: 4px 6px;
+}
+
+#workspaces button {
+    all: unset;
+    color: #61616b;
+    font-size: 11px;
+    font-weight: 600;
+    min-width: 20px;
+    padding: 2px 7px;
+    margin: 0 2px;
+    border-radius: 8px;
+    transition: background 180ms ease, color 180ms ease;
+}
+
+/* A workspace with nothing on it recedes; one with windows stays legible, so
+   the row also tells you where your work actually is. */
+#workspaces button.empty {
+    color: #3a3a42;
+}
+
+#workspaces button:hover {
+    background: rgba(255, 255, 255, 0.10);
+    color: #ededf0;
+}
+
+#workspaces button.active {
+    background: #ffffff;
+    color: #0d0d10;
+    min-width: 24px;
+}
+
+#workspaces button.urgent {
+    background: #ffffff;
+    color: #0d0d10;
+    animation: pulse 1.4s ease-in-out infinite alternate;
+}
+
+/* ---- now playing ------------------------------------------------------
+ * The spin itself lives in song-spin.sh; this only colours it. Playing is
+ * bright because it is moving and moving things earn the eye; paused sinks.
+ *
+ * No rule is needed for "nothing playing": waybar hides a module whose output
+ * is empty, so the chip disappears on its own. (A `#custom-song:empty` rule is
+ * what took the bar down earlier — GTK CSS has no :empty pseudo-class, waybar
+ * exits 1 on the parse error, and the watchdog crash-looped and gave up.) */
+#custom-song {
+    color: #b6b6c0;
+    font-weight: 400;
+    padding: 0 16px;
+}
+
+#custom-song.playing {
+    color: #ededf0;
+}
+
+#custom-song.paused {
+    color: #7d7d87;
+}
+
+/* ---- left: focused window --------------------------------------------- */
+#window {
+    color: #b6b6c0;
+    font-weight: 400;
+    padding: 0 16px;
+}
+
+/* An empty title would otherwise leave a floating empty chip. */
+window#waybar.empty #window {
+    background: transparent;
+    border-color: transparent;
+}
+
+/* ---- centre: clock ---------------------------------------------------- */
+#clock {
+    color: #ededf0;
+    font-weight: 600;
+    padding: 0 22px;
+    /* The centre needs air around it, not just inside it: 18px of margin keeps
+       the clock from touching the left group when the song title is long. */
+    margin: 5px 18px;
+    letter-spacing: 0.4px;
+}
+
+/* ---- right ------------------------------------------------------------ */
+#cpu, #memory, #custom-gpuinfo {
+    color: #b6b6c0;
+}
+
+#memory.warning {
+    color: #ededf0;
+}
+
+#memory.critical,
+#battery.critical:not(.charging) {
+    color: #ffffff;
+    border-color: #b6b6c0;
+    animation: pulse 2s ease-in-out infinite alternate;
+}
+
+#bluetooth {
+    color: #7d7d87;          /* off/idle: present but quiet */
+}
+
+#bluetooth.on,
+#bluetooth.discoverable {
+    color: #b6b6c0;
+}
+
+#bluetooth.connected {
+    color: #ededf0;
+}
+
+#network {
+    color: #b6b6c0;
+}
+
+#network.disconnected,
+#network.disabled {
+    color: #4a4a52;          /* offline sinks toward the background */
+}
+
+#pulseaudio {
+    color: #b6b6c0;
+}
+
+#pulseaudio.muted {
+    color: #4a4a52;
+}
+
+#battery {
+    color: #b6b6c0;
+}
+
+#battery.charging,
+#battery.plugged {
+    color: #ededf0;          /* charging is the only "good news" state */
+}
+
+#battery.warning:not(.charging) {
+    color: #ededf0;
+    border-color: #61616b;
+}
+
+/* Notification bell: classes come from notif-graphite.py, same states as the
+   cards themselves. */
+#custom-notifications.idle    { color: #7d7d87; }
+#custom-notifications.history { color: #b6b6c0; }
+#custom-notifications.waiting { color: #ededf0; }
+#custom-notifications.paused  { color: #4a4a52; }
+
+#tray {
+    padding: 0 8px;
+}
+
+#tray menu {
+    background: rgba(22, 22, 25, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    color: #ededf0;
+}
+
+#custom-power {
+    color: #b6b6c0;
+    padding: 0 12px;
+}
+
+#custom-power:hover {
+    color: #ffffff;
+}
+
+/* Attention without colour: a slow breath. Fast blinking is what makes a bar
+   exhausting to sit next to, so this is deliberately gentle and long-cycle. */
+@keyframes pulse {
+    from { background: rgba(20, 20, 23, 0.88); }
+    to   { background: rgba(58, 58, 66, 0.95); }
+}
