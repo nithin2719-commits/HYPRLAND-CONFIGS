@@ -1,3 +1,13 @@
+    // Notification indicator, matched to ~/.config/dunst/dunstrc.
+    //
+    // HyDE's own notifications.py is replaced by notif-graphite.py: the shipped
+    // one bakes white/yellow/red pango spans into its icons, which clashes with
+    // the graphite cards. The replacement emits the glyph itself plus a state
+    // class (idle/history/waiting/paused) that style.css colours, so the bar
+    // and the notifications stay one system.
+    //
+    // "escape" MUST stay false: the script emits pango markup (the <sup> count)
+    // and escaping would print the tag literally.
     "custom/notifications": {
       // "format": "{icon} {}",
         "format": "{} {icon}", // TODO: workaround for the module not showing up // revert when fixed
