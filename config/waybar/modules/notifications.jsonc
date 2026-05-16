@@ -9,8 +9,7 @@
     // "escape" MUST stay false: the script emits pango markup (the <sup> count)
     // and escaping would print the tag literally.
     "custom/notifications": {
-      // "format": "{icon} {}",
-        "format": "{} {icon}", // TODO: workaround for the module not showing up // revert when fixed
+        "format": "{}",
         "rotate": ${r_deg},
         "format-icons": {
             "email-notification": "<span foreground='white'><sup></sup></span>",
