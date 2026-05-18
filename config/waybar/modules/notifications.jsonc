@@ -20,5 +20,5 @@
         "on-click-right": "dunstctl close-all",
         "interval": 2,
         "tooltip": true,
-        "escape": true
+        "escape": false
     },
