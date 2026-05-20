@@ -35,7 +35,12 @@
         }
     },
 
-    "idle_inhibitor": {
+"custom/cava": {
+	"format": "{}",
+	"exec": "waybar_cava.sh",
+	"restart-interval": 1,
+	"hide-empty": true
+},    "idle_inhibitor": {
         "format": "{icon}",
         "rotate": 0,
         "format-icons": {
