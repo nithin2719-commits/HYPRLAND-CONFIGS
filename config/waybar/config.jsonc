@@ -121,41 +121,6 @@
     "scroll-step": 5
 },
 
-    "custom/updates": {
-        "exec": "systemupdate.sh",
-        "return-type": "json",
-        "format": "{}",
-        "rotate": 0,
-        "on-click": "hyprctl dispatch exec 'systemupdate.sh up'",
-        "interval": 86400, // once every day
-        "tooltip": true,
-        "signal": 20,
-    },
-    "custom/keybindhint": {
-        "format": " ",
-        "tooltip-format": " Keybinds",
-        "rotate": 0,
-        "on-click": "keybinds_hint.sh"
-    },
-
-    "privacy": {
-        "icon-size": 12,
-        "icon-spacing": 5,
-        "transition-duration": 250,
-        "modules": [
-            {
-                "type": "screenshare",
-                "tooltip": true,
-                "tooltip-icon-size": 24
-            },
-            {
-                "type": "audio-in",
-                "tooltip": true,
-                "tooltip-icon-size": 24
-            }
-        ]
-    },
-
     "tray": {
         "icon-size": 16,
         "rotate": 0,
