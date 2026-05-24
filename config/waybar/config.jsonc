@@ -141,8 +141,9 @@
         "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
     },
 
-    "custom/wallchange": {
-        "format": "{}",
+    "custom/keybindhint": {
+        "format": " ",
+        "tooltip-format": " Keybinds",
         "rotate": 0,
         "exec": "echo ; echo 󰆊 switch wallpaper",
         "on-click": "swwwallpaper.sh -n",
