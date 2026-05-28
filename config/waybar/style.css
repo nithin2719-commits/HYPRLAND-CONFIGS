@@ -143,9 +143,9 @@ tooltip {
 }
 
 #custom-r_end {
-    border-radius: 0px 19px 19px 0px;
-    margin-right: 8px;
-    padding-right: 0px;
+    border-radius: 0px;
+    margin-right: 12px;
+    padding-right: 4px;
 }
 
 #custom-l_end {
