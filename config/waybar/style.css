@@ -173,7 +173,7 @@ tooltip {
 }
 
 #custom-rl_end {
-    border-radius: 7px 0px 0px 7px;
-    margin-left: 8px;
-    padding-left: 0px;
+    border-radius: 0px;
+    margin-left: 12px;
+    padding-left: 4px;
 }
