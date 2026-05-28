@@ -167,9 +167,9 @@ tooltip {
 }
 
 #custom-rr_end {
-    border-radius: 0px 7px 7px 0px;
-    margin-right: 8px;
-    padding-right: 0px;
+    border-radius: 0px;
+    margin-right: 12px;
+    padding-right: 4px;
 }
 
 #custom-rl_end {
