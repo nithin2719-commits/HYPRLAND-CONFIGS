@@ -1,3 +1,5 @@
+### Graphite notifications — dunst (Option 2: Top-Right Minimalist Arch Card)
+
 [global]
 monitor = 0
 follow = mouse
