@@ -4,8 +4,14 @@
     monitor = 0
     follow = mouse
 
-font = JetBrainsMono Nerd Font 11
-format = "<b>%s</b>\n%b"
+    ### geometry ###########################################################
+    width = (340, 420)
+    height = (0, 260)
+    origin = top-right
+    offset = (16, 44)
+    scale = 0
+    notification_limit = 4
+    layer = overlay
 
 frame_width = 2
 corner_radius = 15
