@@ -13,9 +13,17 @@
     notification_limit = 4
     layer = overlay
 
-frame_width = 2
-corner_radius = 15
-gap_size = 10
+    ### the surface ########################################################
+    frame_width = 1
+    frame_color = "#3a3a42"
+    corner_radius = 14
+    corners = all
+    gap_size = 10
+    separator_height = 0
+    padding = 16
+    horizontal_padding = 18
+    text_icon_padding = 16
+    transparency = 0
 
 markup = full
 
