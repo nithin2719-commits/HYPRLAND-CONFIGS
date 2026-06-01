@@ -1,13 +1,8 @@
 ### Graphite notifications — dunst (Option 2: Top-Right Minimalist Arch Card)
 
 [global]
-monitor = 0
-follow = mouse
-width = 320
-height = (0, 300)
-origin = top-right
-offset = (20, 40)
-layer = overlay
+    monitor = 0
+    follow = mouse
 
 font = JetBrainsMono Nerd Font 11
 format = "<b>%s</b>\n%b"
