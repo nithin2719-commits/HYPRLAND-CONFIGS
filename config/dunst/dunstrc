@@ -40,11 +40,13 @@
     stack_duplicates = true
     show_indicators = false
 
-# 🔥 smooth volume animation bar
-progress_bar = true
-progress_bar_height = 8
-progress_bar_frame_width = 0
-progress_bar_corner_radius = 6
+    ### icons ##############################################################
+    enable_recursive_icon_lookup = true
+    icon_theme = "Obsidian, Adwaita, hicolor"
+    icon_position = left
+    default_icon = ~/.config/dunst/mark.png
+    min_icon_size = 48
+    max_icon_size = 64
 
 transparency = 10
 
