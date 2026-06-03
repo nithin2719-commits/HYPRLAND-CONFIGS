@@ -88,7 +88,114 @@
     frame_color = "#3a3a42"
 
 [urgency_critical]
-timeout = 2
-background = "#1e1e2ecc"
-foreground = "#f38ba8"
-frame_color = "#f38ba8"
+    timeout = 20
+    default_icon = ~/.config/dunst/mark-hot.png
+    background = "#16161ceb"
+    foreground = "#f2f2f5"
+    frame_color = "#9b9ba4"
+    fullscreen = show
+    format = "<span size='small' foreground='#9b9ba4'> %a  ·  urgent</span>\n<span size='large' foreground='#f2f2f5'><b>%s</b></span>\n<span foreground='#c8c8ce'>%b</span>"
+
+[chat-whatsapp]
+    summary = "(?i).*(whatsapp).*"
+    appname = "(?i).*(whatsapp|zapzap|chrome|google-chrome|chromium|brave).*"
+    default_icon = /usr/share/icons/Papirus/64x64/apps/whatsapp.svg
+    new_icon = /usr/share/icons/Papirus/64x64/apps/whatsapp.svg
+    icon = /usr/share/icons/Papirus/64x64/apps/whatsapp.svg
+    timeout = 8
+    urgency = normal
+    fullscreen = show
+
+[mail-gmail]
+    summary = "(?i).*(gmail|mail\.google).*"
+    appname = "(?i).*(gmail|mail\.google|chrome|google-chrome|chromium|brave).*"
+    default_icon = /usr/share/icons/Papirus/64x64/apps/gmail.svg
+    new_icon = /usr/share/icons/Papirus/64x64/apps/gmail.svg
+    icon = /usr/share/icons/Papirus/64x64/apps/gmail.svg
+    timeout = 8
+    urgency = normal
+    fullscreen = show
+
+[chat-telegram]
+    appname = "(?i)telegram"
+    default_icon = telegram
+    new_icon = telegram
+
+[chat-discord]
+    appname = "(?i)discord"
+    default_icon = discord
+    new_icon = discord
+
+[chat-apps]
+    appname = "(?i)(signal|element|slack)"
+    timeout = 7
+    urgency = normal
+    frame_color = "#5c5c66"
+    fullscreen = show
+    format = "<span size='small' foreground='#8a8a95'>󰭹  %a</span>\n<span size='large' foreground='#f2f2f5'><b>%s</b></span>\n<span foreground='#b0b0b8'>%b</span>"
+
+[browser-web-notifications]
+    appname = "(?i)(chromium|google.?chrome|chrome)"
+    timeout = 6
+    fullscreen = show
+    format = "<span size='small' foreground='#8a8a95'>󰖟  %a</span>\n<span size='large' foreground='#f2f2f5'><b>%s</b></span>\n<span foreground='#9b9ba4'>%b</span>"
+
+[osd-transient]
+    appname = volume
+    timeout = 1
+    urgency = low
+    format = "<span size='large' foreground='#f2f2f5'><b>%s</b></span>"
+    default_icon = ~/.config/dunst/mark.png
+    set_stack_tag = osd
+    history_ignore = yes
+
+[osd-brightness]
+    appname = brightness
+    timeout = 1
+    urgency = low
+    format = "<span size='large' foreground='#f2f2f5'><b>%s</b></span>"
+    default_icon = ~/.config/dunst/mark.png
+    set_stack_tag = osd
+    history_ignore = yes
+
+[blackarch-toolbox]
+    summary = "(?i)^blackarch"
+    timeout = 2
+    urgency = low
+    format = "<span foreground='#9b9ba4'>󰣇  <span size='large' foreground='#f2f2f5'><b>%s</b></span>  %b</span>"
+    history_ignore = yes
+
+[screenshot-preview]
+    appname = "(?i)(grim|grimblast|hyprshot|flameshot|swappy)"
+    timeout = 6
+    max_icon_size = 120
+    format = "<span size='small' foreground='#6e6e78'> 󰄀  %a</span>\n<span size='large' foreground='#f2f2f5'><b>%s</b></span>\n<span foreground='#9b9ba4'>%b</span>"
+
+# --- app icons -------------------------------------------------------------
+# Matched on the exact app name the sender uses: this dunst matches filters
+# literally, so the (?i).*(...).*  patterns below never fire. Everything that
+# is not named here keeps the default Arch mark.
+[icon-whatsapp-web]
+    appname = web.whatsapp.com
+    default_icon = /usr/share/icons/Papirus/64x64/apps/whatsapp.svg
+    new_icon = /usr/share/icons/Papirus/64x64/apps/whatsapp.svg
+
+[icon-whatsapp-app]
+    appname = WhatsApp
+    default_icon = /usr/share/icons/Papirus/64x64/apps/whatsapp.svg
+    new_icon = /usr/share/icons/Papirus/64x64/apps/whatsapp.svg
+
+[icon-whatsapp-zapzap]
+    appname = ZapZap
+    default_icon = /usr/share/icons/Papirus/64x64/apps/whatsapp.svg
+    new_icon = /usr/share/icons/Papirus/64x64/apps/whatsapp.svg
+
+[icon-gmail-web]
+    appname = mail.google.com
+    default_icon = /usr/share/icons/Papirus/64x64/apps/gmail.svg
+    new_icon = /usr/share/icons/Papirus/64x64/apps/gmail.svg
+
+[icon-gmail-inbox]
+    appname = Gmail
+    default_icon = /usr/share/icons/Papirus/64x64/apps/gmail.svg
+    new_icon = /usr/share/icons/Papirus/64x64/apps/gmail.svg
