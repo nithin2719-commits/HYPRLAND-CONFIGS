@@ -3,6 +3,8 @@
   "ignore-gtk-theme": true,
   "positionX": "right",
   "positionY": "top",
+  "control-center-positionX": "center",
+  "control-center-positionY": "top",
   "layer": "overlay",
   "control-center-layer": "top",
   "layer-shell": true,
