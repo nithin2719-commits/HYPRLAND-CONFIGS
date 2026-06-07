@@ -17,6 +17,9 @@
   "widgets": [
     "title",
     "dnd",
+    "mpris",
+    "volume",
+    "backlight",
     "notifications"
   ],
   "widget-config": {
