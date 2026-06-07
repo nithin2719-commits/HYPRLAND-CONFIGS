@@ -23,14 +23,6 @@
     "notifications"
   ],
   "widget-config": {
-    "notifications": {
-      "vexpand": true
-    },
-    "inhibitors": {
-      "text": "Inhibitors",
-      "button-text": "Clear All",
-      "clear-all-button": true
-    },
     "title": {
       "text": "Notifications",
       "clear-all-button": true,
