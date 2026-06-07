@@ -24,7 +24,7 @@
   ],
   "widget-config": {
     "title": {
-      "text": "Notifications",
+      "text": "Control Center",
       "clear-all-button": true,
       "button-text": "Clear All"
     },
