@@ -69,8 +69,8 @@ notificationwindow, blankwindow {
 }
 
 .notification-row {
-    outline: none;
-    margin: 5px;
+  background: none;
+  outline: none;
 }
 
 .notification {
