@@ -94,9 +94,8 @@ notificationwindow, blankwindow {
   /* Low Priority Notification */
 }
 
-.notification.low {
-    border: 1px solid rgba(107, 203, 119, 0.6);
-    background: rgba(20, 35, 20, 0.97);
+.notification-row .notification-background .notification.normal {
+  /* Normal Priority Notification */
 }
 
 .notification.normal .summary {
