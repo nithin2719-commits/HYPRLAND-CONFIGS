@@ -90,8 +90,8 @@ notificationwindow, blankwindow {
   background: rgba(var(--noti-bg), var(--noti-bg-alpha));
 }
 
-.notification.low .summary {
-    color: #6bcb77;
+.notification-row .notification-background .notification.low {
+  /* Low Priority Notification */
 }
 
 .notification.low {
