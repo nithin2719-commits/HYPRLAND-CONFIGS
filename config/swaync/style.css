@@ -77,9 +77,8 @@ notificationwindow, blankwindow {
   background: var(--noti-bg-focus);
 }
 
-.notification.critical {
-    border: 1px solid rgba(255, 107, 107, 0.6);
-    background: rgba(35, 20, 20, 0.97);
+.notification-row .notification-background {
+  padding: 6px 12px;
 }
 
 .notification.critical .summary {
