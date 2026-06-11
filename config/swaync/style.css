@@ -81,8 +81,13 @@ notificationwindow, blankwindow {
   padding: 6px 12px;
 }
 
-.notification.critical .summary {
-    color: #ff6b6b;
+.notification-row .notification-background .notification {
+  /* The actual notification */
+  border-radius: var(--border-radius);
+  border: var(--border);
+  padding: 0;
+  transition: var(--hover-tranistion);
+  background: rgba(var(--noti-bg), var(--noti-bg-alpha));
 }
 
 .notification.low .summary {
