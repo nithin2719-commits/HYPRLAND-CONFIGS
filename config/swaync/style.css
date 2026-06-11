@@ -98,8 +98,8 @@ notificationwindow, blankwindow {
   /* Normal Priority Notification */
 }
 
-.notification.normal .summary {
-    color: #ffd93d;
+.notification-row .notification-background .notification.critical {
+  /* Critical Priority Notification */
 }
 
 .notification.normal {
