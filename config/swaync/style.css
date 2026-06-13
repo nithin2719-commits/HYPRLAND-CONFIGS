@@ -140,10 +140,12 @@ notificationwindow, blankwindow {
   margin: 4px;
 }
 
-.body {
-    font-size: 12px;
-    color: #a6adc8;
-    margin-top: 4px;
+.notification-row .notification-background .notification .notification-default-action .notification-content .app-icon {
+  /* Notification app icon (only visible when the primary image is set) */
+  -gtk-icon-filter: none;
+  -gtk-icon-size: var(--notification-app-icon-size);
+  -gtk-icon-shadow: 0 1px 4px black;
+  margin: 6px;
 }
 
 .app-icon {
