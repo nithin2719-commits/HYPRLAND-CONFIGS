@@ -119,10 +119,16 @@ notificationwindow, blankwindow {
   background: var(--noti-bg-hover);
 }
 
-.notification-default-action {
-    background: transparent;
-    border-radius: 12px;
-    padding: 0;
+.notification-row .notification-background .notification .notification-default-action:not(:only-child) {
+  /* When alternative actions are visible */
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.notification-row .notification-background .notification .notification-default-action .notification-content {
+  background: transparent;
+  border-radius: var(--border-radius);
+  padding: 0;
 }
 
 .summary {
