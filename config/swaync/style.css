@@ -114,8 +114,9 @@ notificationwindow, blankwindow {
   border-radius: var(--border-radius);
 }
 
-.notification-content {
-    padding: 5px;
+.notification-row .notification-background .notification .notification-default-action:hover {
+  -gtk-icon-filter: none;
+  background: var(--noti-bg-hover);
 }
 
 .notification-default-action {
