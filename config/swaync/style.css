@@ -148,10 +148,9 @@ notificationwindow, blankwindow {
   margin: 6px;
 }
 
-.app-icon {
-    -gtk-icon-size: 0px;
-    min-width: 0px;
-    min-height: 0px;
+.notification-row .notification-background .notification .notification-default-action .notification-content .text-box label {
+  /* Fixes base GTK 4 CSS setting a filter of opacity 50% for some odd reason */
+  filter: none;
 }
 
 .image {
