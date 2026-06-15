@@ -153,9 +153,13 @@ notificationwindow, blankwindow {
   filter: none;
 }
 
-.image {
-    min-width: 0px;
-    min-height: 0px;
+.notification-row .notification-background .notification .notification-default-action .notification-content .text-box .summary {
+  /* Notification summary/title */
+  font-size: var(--font-size-summary);
+  font-weight: bold;
+  background: transparent;
+  color: var(--text-color);
+  text-shadow: none;
 }
 
 .close-button {
