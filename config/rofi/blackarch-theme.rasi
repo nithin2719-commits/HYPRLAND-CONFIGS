@@ -49,6 +49,8 @@ mainbox {
     padding:  0px;
 }
 
+/* Brand bar: the BlackArch lockup sits on the prompt widget; the entry is the
+   live search field beside it. */
 inputbar {
     background-color:    #1a0000;
     border-radius:       8px 8px 0px 0px;
