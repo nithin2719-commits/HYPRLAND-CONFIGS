@@ -44,9 +44,9 @@ window {
 }
 
 mainbox {
-    background-color:    transparent;
-    children:            [ "inputbar", "message", "listview" ];
-    spacing:             0px;
+    children: [ "inputbar", "message", "listview" ];
+    spacing:  0px;
+    padding:  0px;
 }
 
 inputbar {
