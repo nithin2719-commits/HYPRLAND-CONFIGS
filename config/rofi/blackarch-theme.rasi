@@ -8,15 +8,21 @@
  */
 
 * {
-    bg:          #050505;
-    bg-alt:      #0d0000;
-    fg:          #ff0000;
-    fg-alt:      #cc2200;
-    fg-dim:      #661100;
-    border:      #ff0000;
-    select-bg:   #1a0000;
-    select-fg:   #ff4444;
-    font:        "JetBrainsMono Nerd Font Bold 11";
+    blood:       #ff2b2b;   /* primary accent — border, active bar, counts   */
+    blood-soft:  #c81f22;
+    ember:       #ff7a45;   /* secondary — highlights, keys                  */
+    bg:          #0b0708;   /* window base                                   */
+    bg-inputs:   #17090a;   /* brand / input bar                             */
+    bg-alt:      #100a0b;   /* message strip, scrollbar trough               */
+    row-sel:     #2a0b0e;   /* active row fill                               */
+    fg:          #f4ecec;   /* bright body                                   */
+    fg-dim:      #b09a9a;   /* tool descriptions / package names             */
+    fg-faint:    #6a5555;   /* counts, hints                                 */
+    transparent: rgba(0,0,0,0);
+
+    font:             "JetBrainsMono Nerd Font 11";
+    background-color: transparent;
+    text-color:       @fg;
 }
 
 window {
