@@ -52,12 +52,15 @@ mainbox {
 /* Brand bar: the BlackArch lockup sits on the prompt widget; the entry is the
    live search field beside it. */
 inputbar {
-    background-color:    #1a0000;
-    border-radius:       8px 8px 0px 0px;
-    border:              0px 0px 1px 0px;
-    border-color:        @border;
-    padding:             8px 12px;
-    children:            [ "prompt", "entry" ];
+    background-color: @bg-inputs;
+    border-radius:    14px 14px 0px 0px;
+    border:           0px 0px 1px 0px;
+    border-color:     @blood;
+    /* Kept tight: this bar is chrome, and every pixel it takes is a tool row
+       you cannot see. */
+    padding:          9px 16px;
+    spacing:          14px;
+    children:         [ "prompt", "entry" ];
 }
 
 prompt {
