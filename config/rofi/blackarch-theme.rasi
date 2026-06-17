@@ -63,6 +63,18 @@ inputbar {
     children:         [ "prompt", "entry" ];
 }
 
+/* The BlackArch lockup, drawn as this widget's background image.
+ *
+ * rofi sizes the prompt widget from its TEXT, and ignores `width` here -- so
+ * the 420px below never applied and the 1374px lockup was being squeezed into
+ * roughly 97px. At that scale the thin red ARCH strokes lose more pixels than
+ * the solid white BLACK ones, which is why the two halves of the wordmark
+ * looked like different sizes.
+ *
+ * The prompt text is transparent, so its FONT SIZE is what actually drives the
+ * widget width -- and therefore how large the lockup renders. 22 gives a crisp
+ * wordmark with both halves visibly equal, while leaving the entry room to
+ * type in a 560px window. */
 prompt {
     background-color:    transparent;
     text-color:          @fg;
