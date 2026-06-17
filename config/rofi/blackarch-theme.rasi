@@ -26,17 +26,21 @@
 }
 
 window {
-    transparency:        "real";
-    background-color:    @bg;
-    border:              1px;
-    border-color:        @border;
-    border-radius:       8px;
-    width:               260px;
-    location:            northwest;
-    anchor:              northwest;
-    x-offset:            0px;
-    y-offset:            0px;
-    padding:             0px;
+    transparency:     "real";
+    background-color: @bg;
+    /* Bold red frame. rofi can't animate/glow a border, so this is a vivid,
+       slightly thick solid frame with soft corners for a framed, premium look. */
+    border:           3px;
+    border-color:     #ff3b3b;
+    border-radius:    16px;
+    width:            560px;   /* compact, as before */
+    padding:          0px;
+
+    /* Flush to the top-left corner, just under the waybar. */
+    location:         north west;
+    anchor:           north west;
+    x-offset:         10px;
+    y-offset:         8px;
 }
 
 mainbox {
