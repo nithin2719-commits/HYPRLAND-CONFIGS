@@ -76,9 +76,19 @@ inputbar {
  * wordmark with both halves visibly equal, while leaving the entry room to
  * type in a 560px window. */
 prompt {
-    background-color:    transparent;
-    text-color:          @fg;
-    padding:             0px 8px 0px 0px;
+    expand:           false;
+    font:             "JetBrainsMono Nerd Font 15";
+    width:            420px;
+    /* The lockup is drawn as a background image and centred in this widget's
+       box. At font 22 that box is taller than the entry beside it, so the image
+       centre sat ~4px below the "type to filter…" baseline. Padding the bottom
+       lifts the image by half that, putting the two optically on one line
+       (measured to 0px difference, not eyeballed). */
+    padding:          0px 0px 12px 0px;
+    text-color:       transparent;
+    background-color: transparent;
+    background-image: url("/home/nithin/.config/blackarch-launcher/assets/brand_rofi.png", width);
+    vertical-align:   0.5;
 }
 
 entry {
