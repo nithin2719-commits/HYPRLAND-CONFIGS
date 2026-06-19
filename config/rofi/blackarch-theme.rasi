@@ -102,10 +102,10 @@ entry {
 
 /* Usage hint strip under the brand bar. */
 message {
-    background-color:    #0a0000;
-    border:              0px 0px 1px 0px;
-    border-color:        #220000;
-    padding:             4px 12px;
+    background-color: @bg-alt;
+    border:           0px 0px 1px 0px;
+    border-color:     #21100f;
+    padding:          6px 20px;
 }
 
 textbox {
