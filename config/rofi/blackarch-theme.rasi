@@ -107,7 +107,6 @@ message {
     border-color:     #21100f;
     padding:          6px 20px;
 }
-
 textbox {
     background-color:    transparent;
     text-color:          #ff4400;
