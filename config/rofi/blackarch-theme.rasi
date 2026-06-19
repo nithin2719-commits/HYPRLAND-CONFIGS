@@ -92,10 +92,12 @@ prompt {
 }
 
 entry {
-    background-color:    transparent;
-    text-color:          @fg-alt;
-    placeholder:         "search...";
-    placeholder-color:   @fg-dim;
+    text-color:        @fg;
+    placeholder:       "type to filter…";
+    placeholder-color: @fg-faint;
+    vertical-align:    0.5;
+    cursor:            text;
+    padding:           2px 0px;
 }
 
 message {
