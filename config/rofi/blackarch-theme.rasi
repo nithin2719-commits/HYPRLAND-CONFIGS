@@ -108,9 +108,8 @@ message {
     padding:          6px 20px;
 }
 textbox {
-    background-color:    transparent;
-    text-color:          #ff4400;
-    font:                "JetBrainsMono Nerd Font 9";
+    text-color: @fg-dim;
+    font:       "JetBrainsMono Nerd Font 10";
 }
 
 listview {
