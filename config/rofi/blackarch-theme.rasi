@@ -123,12 +123,10 @@ listview {
     dynamic:          true;
 }
 
-element {
-    background-color:    transparent;
-    border-radius:       4px;
-    padding:             7px 12px;
-    cursor:              pointer;
-    spacing:             8px;
+scrollbar {
+    handle-color:     @blood-soft;
+    handle-width:     4px;
+    background-color: @bg-alt;
 }
 
 element normal.normal {
