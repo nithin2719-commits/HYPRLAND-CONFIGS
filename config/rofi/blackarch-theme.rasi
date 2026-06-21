@@ -136,10 +136,8 @@ element {
     cursor:        pointer;
 }
 
-element alternate.normal {
-    background-color:    #0a0000;
-    text-color:          @fg-alt;
-}
+element normal.normal    { background-color: transparent; text-color: @fg-dim; }
+element alternate.normal { background-color: transparent; text-color: @fg-dim; }
 
 element selected.normal {
     background-color:    @select-bg;
