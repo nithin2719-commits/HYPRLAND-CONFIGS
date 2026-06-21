@@ -140,10 +140,10 @@ element normal.normal    { background-color: transparent; text-color: @fg-dim; }
 element alternate.normal { background-color: transparent; text-color: @fg-dim; }
 
 element selected.normal {
-    background-color:    @select-bg;
-    text-color:          @select-fg;
-    border:              1px;
-    border-color:        @border;
+    background-color: @row-sel;
+    text-color:       @fg;
+    border:           0px 0px 0px 3px;
+    border-color:     @blood;
 }
 
 element-icon {
