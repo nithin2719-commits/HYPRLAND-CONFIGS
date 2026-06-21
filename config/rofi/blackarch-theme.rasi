@@ -113,13 +113,14 @@ textbox {
 }
 
 listview {
-    background-color:    transparent;
-    columns:             1;
-    lines:               8;
-    spacing:             2px;
-    padding:             6px;
-    scrollbar:           false;
-    fixed-height:        false;
+    background-color: transparent;
+    columns:          1;
+    lines:            13;
+    spacing:          2px;
+    padding:          8px 8px;
+    scrollbar:        true;
+    fixed-height:     false;
+    dynamic:          true;
 }
 
 element {
