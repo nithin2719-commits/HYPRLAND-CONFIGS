@@ -1,0 +1,125 @@
+/* Graphite — rofi theme for the bar's menus (wifi picker, notification centre).
+ *
+ * Deliberately NOT blackarch-theme.rasi: that one is branded red with the
+ * BlackArch lockup, which belongs to the Alt+S toolbox. These menus belong to
+ * the bar, so they wear the bar's surface: graphite glass, hairline frame,
+ * one bright element (the selected row's left bar).
+ *
+ *   Tokens match the dashboard slab exactly, so a menu opened from the bar and
+ *   the panel opened from the clock read as one surface.
+ *   glass #141417ee  bg    edge #ffffff14  hairline
+ *   bone  #ededf0    text  dim  #b6b6c0    secondary   faint #7d7d87  hints
+ */
+
+* {
+    glass:            #141417ee;
+    edge:             #ffffff14;
+    row-sel:          #ffffff14;
+    bone:             #ededf0;
+    dim:              #b6b6c0;
+    faint:            #7d7d87;
+    transparent:      rgba(0,0,0,0);
+
+    font:             "JetBrainsMono Nerd Font 11";
+    background-color: transparent;
+    text-color:       @bone;
+}
+
+window {
+    transparency:     "real";
+    background-color: @glass;
+    border:           1px;
+    border-color:     @edge;
+    border-radius:    16px;
+    width:            460px;
+    padding:          0px;
+    location:         north east;
+    anchor:           north east;
+    x-offset:         -12px;
+    y-offset:         52px;      /* clears the bar (38px + 6px margin) */
+}
+
+mainbox {
+    children: [ "inputbar", "message", "listview" ];
+    spacing:  0px;
+    padding:  0px;
+}
+
+inputbar {
+    background-color: transparent;
+    border:           0px 0px 1px 0px;
+    border-color:     @edge;
+    padding:          12px 16px;
+    spacing:          10px;
+    children:         [ "prompt", "entry" ];
+}
+
+prompt {
+    text-color:     @faint;
+    vertical-align: 0.5;
+}
+
+entry {
+    text-color:        @bone;
+    placeholder:       "type to filter…";
+    placeholder-color: @faint;
+    vertical-align:    0.5;
+    cursor:            text;
+}
+
+message {
+    background-color: transparent;
+    border:           0px 0px 1px 0px;
+    border-color:     @edge;
+    padding:          8px 16px;
+}
+
+textbox {
+    text-color: @dim;
+    font:       "JetBrainsMono Nerd Font 10";
+}
+
+listview {
+    background-color: transparent;
+    columns:          1;
+    lines:            9;
+    spacing:          2px;
+    padding:          8px;
+    scrollbar:        true;
+    fixed-height:     false;
+    dynamic:          true;
+}
+
+scrollbar {
+    handle-color:     #ffffff2e;
+    handle-width:     3px;
+    background-color: transparent;
+}
+
+element {
+    padding:       10px 13px;
+    border-radius: 12px;
+    spacing:       10px;
+    cursor:        pointer;
+}
+
+element normal.normal    { background-color: transparent; text-color: @dim; }
+element alternate.normal { background-color: transparent; text-color: @dim; }
+
+/* The one bright element: a left bar on the selected row — the same ▍ the
+   notification cards lead with. */
+element selected.normal {
+    background-color: @row-sel;
+    text-color:       @bone;
+    border:           0px 0px 0px 2px;
+    border-color:     @bone;
+}
+
+element-icon { size: 0px; background-color: transparent; }
+
+element-text {
+    background-color: transparent;
+    text-color:       inherit;
+    vertical-align:   0.5;
+    highlight:        bold #ffffff;
+}
