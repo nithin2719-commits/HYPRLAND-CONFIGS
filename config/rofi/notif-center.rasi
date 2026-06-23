@@ -1,0 +1,102 @@
+/**
+ * Notification centre — same surface as the bar's other menus and the eww
+ * dashboard. It used to be pure black with cool-grey text and a 20px radius,
+ * so it read as a different desktop from everything it sits next to; these are
+ * the shared tokens instead.
+ */
+
+configuration {
+    show-icons:                  false;
+    font:                        "JetBrainsMono Nerd Font 10.5";
+    display-dmenu:               "󰂚   Notifications";
+    disable-history:             true;
+    hover-select:                true;
+    me-select-entry:             "";
+    me-accept-entry:             "MousePrimary";
+}
+
+* {
+    bg:                          #141417ee;
+    bg-chip:                     #ffffff0d;
+    bg-hover:                    #ffffff1c;
+    fg:                          #ededf0;
+    fg-dim:                      #b6b6c0;
+    fg-faint:                    #7d7d87;
+    border-color:                #ffffff14;
+    border-card:                 #ffffff10;
+    border-hover:                #ffffff33;
+    transparent:                 transparent;
+}
+
+window {
+    width:                       460px;
+    border-radius:               16px;
+    border:                      1px solid;
+    border-color:                @border-color;
+    background-color:            @bg;
+    location:                    north east;
+    anchor:                      north east;
+    x-offset:                    -14px;
+    y-offset:                    52px;
+    transparency:                "real";
+}
+
+mainbox {
+    spacing:                     10px;
+    padding:                     14px;
+    background-color:            @transparent;
+    children:                    [ "inputbar", "listview" ];
+}
+
+inputbar {
+    padding:                     12px 16px;
+    spacing:                     10px;
+    border-radius:               12px;
+    background-color:            #ffffff0d;
+    border:                      1px solid;
+    border-color:                #ffffff14;
+    text-color:                  @fg;
+    children:                    [ "prompt" ];
+}
+
+prompt {
+    text-color:                  @fg-dim;
+    font:                        "JetBrainsMono Nerd Font Bold 11";
+    background-color:            @transparent;
+}
+
+listview {
+    lines:                       6;
+    columns:                     1;
+    fixed-height:                false;
+    dynamic:                     true;
+    spacing:                     8px;
+    padding:                     2px 0px;
+    background-color:            @transparent;
+    scrollbar:                   false;
+}
+
+element {
+    padding:                     12px 16px;
+    spacing:                     8px;
+    border-radius:               12px;
+    background-color:            @bg-chip;
+    text-color:                  @fg;
+    cursor:                      pointer;
+    border:                      1px solid;
+    border-color:                @border-card;
+}
+
+element selected {
+    background-color:            @bg-hover;
+    text-color:                  @fg;
+    border-color:                @border-hover;
+}
+
+element-text {
+    text-color:                  inherit;
+    background-color:            @transparent;
+    vertical-align:              0.5;
+    highlight:                   none;
+    markup:                      true;
+}
