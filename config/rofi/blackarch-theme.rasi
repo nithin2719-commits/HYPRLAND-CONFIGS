@@ -147,8 +147,8 @@ element selected.normal {
 }
 
 element-icon {
-    size:                20px;
-    background-color:    transparent;
+    size:             0px;
+    background-color: transparent;
 }
 
 element-text {
