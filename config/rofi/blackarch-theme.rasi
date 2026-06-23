@@ -152,7 +152,8 @@ element-icon {
 }
 
 element-text {
-    background-color:    transparent;
-    text-color:          inherit;
-    vertical-align:      0.5;
+    background-color: transparent;
+    text-color:       inherit;
+    vertical-align:   0.5;
+    highlight:        bold #ff7a45;   /* live fuzzy-match highlight */
 }
