@@ -1,0 +1,375 @@
+/* SignFlow rice — dashboard
+   dark glass, white accent, no chrome */
+
+* {
+  all: unset;
+  font-family: "JetBrainsMono Nerd Font", "Symbols Nerd Font", sans-serif;
+  font-size: 13px;
+  color: #ededf0;
+}
+
+.shell {
+  padding: 10px;
+}
+
+/* the glass slab */
+.panel {
+  background-color: rgba(20, 20, 23, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 24px;
+  padding: 13px;
+}
+
+.col { margin: 0 6px; }
+.left   { min-width: 300px; }
+.center { min-width: 340px; }
+.right  { min-width: 320px; }
+
+/* generic card */
+.tile {
+  background-color: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 13px 14px;
+  margin-bottom: 9px;
+}
+.col > .tile:last-child { margin-bottom: 0; }
+
+/* ── header ── */
+.headercard { padding: 13px 15px; }
+.greeting   { color: #ffffff; font-size: 16px; }
+.date       { color: #7d7d87; font-size: 12px; margin-top: 5px; }
+
+/* ── sliders ── */
+.slidertile { padding: 11px 14px; }
+.tileicon   { color: #d7d7de; font-size: 15px; margin-right: 10px; }
+.tilelabel  { color: #b6b6c0; font-size: 12px; }
+.tilevalue  { color: #7d7d87; font-size: 12px; }
+
+scale trough {
+  background-color: rgba(255, 255, 255, 0.10);
+  border-radius: 10px;
+  min-height: 6px;
+  margin-top: 12px;
+}
+scale trough highlight {
+  background-color: #ffffff;
+  border-radius: 10px;
+}
+scale slider {
+  background-color: transparent;
+  min-width: 0;
+  min-height: 0;
+  margin: -7px;
+}
+.slidertile:hover scale slider,
+.musiccard:hover scale slider {
+  background-color: #ffffff;
+  border-radius: 50%;
+  min-width: 10px;
+  min-height: 10px;
+  margin: -3px;
+}
+
+/* ── calendar ── */
+.calhead   { margin-bottom: 10px; }
+.calmonth  { font-size: 15px; color: #ffffff; }
+.caltoday  { font-size: 12px; color: #7d7d87; }
+
+.calnav {
+  color: #8b8b95;
+  font-size: 14px;
+  padding: 2px 7px;
+  border-radius: 8px;
+}
+.calnav:hover { background-color: rgba(255, 255, 255, 0.09); color: #ffffff; }
+
+.caldays  { margin-bottom: 4px; }
+.dayname  { color: #61616b; font-size: 11px; }
+
+.calweek  { margin: 1px 0; }
+.cell {
+  border-radius: 10px;
+  padding: 5px 0;
+  margin: 1px;
+}
+.cell     { color: #c4c4ce; font-size: 12.5px; }
+.cell:hover { background-color: rgba(255, 255, 255, 0.08); }
+.cell.dim { color: #43434b; }
+.cell.today {
+  background-color: #ffffff;
+  color: #16161a;
+  font-weight: bold;
+}
+/* a day that already carries an unfinished todo */
+.cell.hasdue {
+  border: 1px solid rgba(255, 255, 255, 0.30);
+  color: #ffffff;
+}
+/* the day currently armed for the next todo */
+.cell.picked {
+  background-color: rgba(255, 255, 255, 0.24);
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* ── todo ── */
+.todocard  { padding: 14px 16px; }
+.todotitle { font-size: 13px; color: #7d7d87; margin-bottom: 9px; }
+/* inline entry row */
+.todoinput { margin-bottom: 8px; }
+.datechip {
+  color: #101014;
+  font-size: 11px;
+  padding: 5px 9px;
+  margin-right: 7px;
+  border-radius: 9px;
+  background-color: #ffffff;
+}
+.datechip:hover { background-color: #e6e6ea; }
+
+.todoentry {
+  color: #ededf0;
+  font-size: 12.5px;
+  padding: 7px 11px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  caret-color: #ffffff;
+}
+.todoentry:focus { border: 1px solid rgba(255, 255, 255, 0.30); }
+.todoentry selection { background-color: rgba(255, 255, 255, 0.25); }
+
+.todoscroll { margin-top: 2px; padding-bottom: 4px; }
+.todoitem {
+  padding: 3px 2px;
+  min-height: 34px;          /* a comfortable click target, not a hairline */
+  border-radius: 10px;
+}
+.todoitem:hover { background-color: rgba(255, 255, 255, 0.04); }
+.todotext { color: #c9c9d2; font-size: 12.5px; margin-left: 4px; }
+.todoitem.done .todotext { color: #55555f; }
+/* the tick: an empty ring that fills white when the task is done. The hit area
+   stays 36px; only the 20px ring inside it is drawn. */
+/* just a tick box: outline when open, ticked when done */
+.check {
+  color: #7d7d87;
+  font-size: 16px;
+  min-width: 26px;
+  min-height: 26px;
+  border-radius: 8px;
+  margin-right: 8px;
+  transition: color 140ms ease;
+}
+.check:hover  { color: #ffffff; }
+.check.on     { color: #ffffff; }
+.check.on { color: #ffffff; }
+.duechip {
+  font-size: 10px;
+  color: #9a9aa4;
+  background-color: rgba(255, 255, 255, 0.07);
+  border-radius: 7px;
+  padding: 2px 7px;
+  margin: 0 7px;
+}
+.duechip.late { background-color: rgba(255, 107, 107, 0.16); color: #ff8f8f; }
+.todoitem.done .duechip { color: #55555f; background-color: rgba(255,255,255,0.04); }
+/* always visible — hiding it until hover meant there was no way to tell a row
+   could be deleted at all. Dim enough not to compete with the task text. */
+.tododel {
+  color: #6e6e78;
+  font-size: 12px;
+  min-width: 34px;
+  min-height: 34px;
+  border-radius: 10px;
+  transition: color 140ms ease, background-color 140ms ease;
+}
+.tododel:hover { background-color: rgba(255, 92, 92, 0.16); color: #ff8f8f; }
+.tododel:hover { color: #ff6b6b; }
+.todoempty { color: #4d4d56; font-size: 12px; padding: 12px 2px; }
+
+/* ── system ── */
+.syscard   { padding: 12px 14px 13px 14px; }
+.syshead   { margin-bottom: 9px; }
+.systitle  { font-size: 14px; color: #ffffff; }
+.sysup     { font-size: 11px; color: #7d7d87; }
+
+.ring {
+  color: #ffffff;                             /* the filled arc */
+  background-color: rgba(255, 255, 255, 0.09); /* the track */
+  margin-bottom: 7px;
+}
+.ringval    { font-size: 11px; color: #d4d4dc; }
+.statlabel  { font-size: 11px; color: #8b8b95; }
+.statsub    { font-size: 9.5px; color: #55555f; margin-top: 1px; }
+
+/* ── music ── */
+.musiccard { padding: 14px; }
+.arthold { margin-bottom: 12px; }
+.cdring {
+  color: #ffffff;                              /* elapsed arc */
+  background-color: rgba(255, 255, 255, 0.10); /* the rest of the track */
+}
+
+.track  { font-size: 15px; color: #ffffff; margin-top: 2px; }
+.artist { font-size: 12px; color: #83838d; margin-top: 3px; }
+
+.seek trough { margin-top: 12px; }
+.times { margin-top: 7px; }
+.t     { font-size: 11px; color: #6e6e78; }
+
+.controls { margin-top: 11px; }
+.iconbtn {
+  color: #c9c9d2;
+  font-size: 17px;
+  padding: 8px 14px;
+  border-radius: 12px;
+}
+.iconbtn:hover { background-color: rgba(255, 255, 255, 0.08); }
+.iconbtn.play {
+  background-color: #ffffff;
+  color: #0d0d10;
+  font-size: 17px;
+  font-weight: bold;
+  border-radius: 50%;
+  min-width: 46px;
+  min-height: 46px;
+  padding: 0;
+  margin: 0 16px;
+}
+.iconbtn.play:hover { background-color: #e2e2e6; }
+
+/* ── quick actions ── */
+.actionscard { padding: 8px 10px; }
+.action {
+  color: #b6b6c0;
+  font-size: 17px;
+  padding: 9px 0;
+  margin: 0 2px;
+  border-radius: 12px;
+}
+.action:hover { background-color: #ffffff; color: #16161a; }
+
+/* invisible click-catcher behind the slab */
+.backdrop { background-color: rgba(0, 0, 0, 0.01); }
+
+/* ── footer strip ── */
+.footer {
+  padding: 9px 6px 2px 6px;
+  margin-top: 3px;
+}
+.distrologo { font-size: 17px; color: #ffffff; margin-right: 10px; }
+.footname   { font-size: 12px; color: #d4d4dc; }
+.footline   { font-size: 11.5px; color: #6e6e78; }
+.footsep    { font-size: 11px; color: #43434b; margin: 0 8px; }
+
+/* invisible click-catcher behind the slab */
+.backdrop { background-color: rgba(0, 0, 0, 0.01); }
+
+/* ── contrast on light surfaces ──
+   The universal reset sets a colour on every node, which beats inheritance,
+   so each light-background control names its label explicitly. */
+.iconbtn.play, .iconbtn.play label { color: #0d0d10; }
+.cell.today,   .cell.today label   { color: #101014; }
+.cell.picked,  .cell.picked label  { color: #ffffff; }
+.datechip.set, .datechip label { color: #101014; }
+.todoadd:hover label { color: #16161a; }
+.action:hover label  { color: #16161a; }
+.calnav:hover label  { color: #ffffff; }
+.check.on label { color: #ffffff; }
+
+/* ── radio toggles ──
+   Two half-width pills that read their own state: lit means the radio is up,
+   and the sub-line carries the thing you actually want to know (which network,
+   which device) rather than repeating the word "on". */
+.radios { margin-bottom: 9px; }
+.toggle {
+  background-color: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 10px 12px;
+  margin-right: 9px;
+  transition: background-color 160ms ease;
+}
+.radios > widget:last-child > .toggle { margin-right: 0; }
+.toggle:hover { background-color: rgba(255, 255, 255, 0.09); }
+
+.toggleicon  { font-size: 17px; color: #7d7d87; margin-right: 10px; }
+.togglelabel { font-size: 12px;   color: #b6b6c0; }
+.togglesub   { font-size: 10px;   color: #61616b; margin-top: 1px; }
+
+.toggle.on { background-color: #ffffff; border-color: #ffffff; }
+.toggle.on .toggleicon,
+.toggle.on .togglelabel { color: #101014; }
+.toggle.on .togglesub   { color: #4d4d56; }
+.toggle.on:hover { background-color: #e6e6ea; }
+
+/* recording: a lit dot while wf-recorder runs, so it is never left on by
+   accident the way a silent background capture would be */
+.action.live {
+  background-color: #ff5c5c;
+  color: #ffffff;
+}
+.action.live label { color: #ffffff; }
+.action.live:hover { background-color: #ff7a7a; }
+
+/* ── inline network / device picker ──
+   Opens under the pills instead of throwing a menu at the screen, so choosing
+   a network is the same gesture as everything else on the panel. */
+.netcard { padding: 12px 13px; margin-bottom: 9px; }
+.nethead { margin-bottom: 7px; }
+.nettitle { font-size: 13px; color: #ffffff; }
+.netclose {
+  color: #7d7d87;
+  font-size: 13px;
+  min-width: 24px;
+  min-height: 24px;
+  border-radius: 8px;
+}
+.netclose:hover { background-color: rgba(255, 255, 255, 0.09); color: #ffffff; }
+
+.netrow {
+  padding: 6px 6px;
+  border-radius: 10px;
+  min-height: 34px;
+}
+.netrow:hover { background-color: rgba(255, 255, 255, 0.06); }
+.netdot     { color: #3a3a42; font-size: 9px; margin-right: 10px; }
+.netdot.on  { color: #ffffff; }
+.netname    { font-size: 12.5px; color: #c9c9d2; }
+.netrow.on .netname { color: #ffffff; }
+.netsub     { font-size: 10px; color: #61616b; margin-top: 1px; }
+
+.netaskrow  { margin-bottom: 7px; }
+.netasklabel { font-size: 11px; color: #7d7d87; margin-right: 8px; }
+.netpassentry {
+  color: #ededf0;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 9px;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  caret-color: #ffffff;
+}
+.netpassentry:focus { border-color: rgba(255, 255, 255, 0.30); }
+
+/* ── header context chips ──
+   One quiet line under the date: what is due today, and the battery. Enough to
+   answer "anything I need to know?" without turning the greeting into a panel. */
+.headerchips { margin-top: 9px; }
+.chip {
+  font-size: 11px;
+  color: #b6b6c0;
+  background-color: rgba(255, 255, 255, 0.06);
+  border-radius: 9px;
+  padding: 4px 10px;
+  margin-right: 7px;
+}
+.chip.warn {
+  background-color: rgba(255, 255, 255, 0.92);
+  color: #101014;
+  font-weight: bold;
+}
+
+/* the disc's slot — painted over by the Cairo spinner */
+.cdslot { min-width: 264px; min-height: 264px; }
