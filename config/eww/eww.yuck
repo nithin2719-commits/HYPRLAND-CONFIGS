@@ -1,0 +1,314 @@
+;; ─────────────────────────────────────────────────────────────
+;;  Dashboard — calendar + music, opened from the waybar clock
+;; ─────────────────────────────────────────────────────────────
+
+(defpoll clock_time  :interval "5s"  "date +'%I:%M'")
+(defpoll clock_ampm  :interval "5s"  "date +'%p'")
+(defpoll clock_date  :interval "60s" "date +'%A, %d %B'")
+(defpoll greeting    :interval "60s" "h=$(date +%H); if [ $h -lt 12 ]; then echo Morning; elif [ $h -lt 17 ]; then echo Afternoon; elif [ $h -lt 21 ]; then echo Evening; else echo Night; fi")
+;; cal_nav.sh keeps the offset on disk and pushes a fresh grid on click;
+;; the poll only refreshes the view (e.g. across midnight).
+(defpoll cal :interval "60s" :initial '{"title":"","weeks":[]}'
+  "~/.config/eww/scripts/cal.sh $(cat ~/.cache/eww/cal_offset 2>/dev/null || echo 0)")
+
+(defpoll volume      :interval "2s"  :initial "0"  "pamixer --get-volume 2>/dev/null || echo 0")
+(defpoll muted       :interval "2s"  :initial "false" "pamixer --get-mute 2>/dev/null || echo false")
+(defpoll bright      :interval "3s"  :initial "50" "brightnessctl -m 2>/dev/null | cut -d, -f4 | tr -d '%' | grep . || echo 50")
+
+(defpoll about :interval "600s" :initial '{"distro":"","host":"","kernel":"","pkgs":"","wm":""}'
+  "~/.config/eww/scripts/about.sh")
+
+(defvar netpanel "")   ;; "" | "wifi" | "bt" — which inline picker is open
+(defvar netlist "[]")
+(defvar netask "")     ;; SSID waiting for a password
+(defvar netpass "")
+
+(defpoll radios :interval "10s" :initial '{"wifi":false,"wifiname":"off","bt":false,"btname":"off"}'
+  "~/.config/eww/scripts/radios.sh state")
+(defpoll dnd :interval "5s" :initial "false" "dunstctl is-paused")
+
+(defpoll recording :interval "5s" :initial "off" "~/.config/eww/scripts/record.sh state")
+
+(defpoll sys :interval "5s" :initial '{"cpu":0,"mem":0,"disk":0,"up":"","memtext":""}'
+  "~/.config/eww/scripts/sys.sh")
+
+(defpoll todos :interval "10s" :initial "[]" "~/.config/eww/scripts/todo.sh list")
+;; Date a new todo gets attached to: pick a day in the calendar, type, Enter.
+(defvar todo_date "")
+(defvar todo_draft "")
+
+(deflisten spin :initial "0" "~/.config/eww/scripts/spin.sh")
+
+(defpoll music :interval "1s" :initial '{"status":"Stopped","title":"Nothing playing","artist":"","art":"","cddir":"","cdready":"no","progress":0,"elapsed":"0:00","total":"0:00","player":"","length":0}'
+  "~/.config/eww/scripts/music.sh")
+
+;; ── small pieces ────────────────────────────────────────────
+
+(defwidget tile [?class ?vexpand]
+  (box :class "tile ${class ?: ''}" :orientation "v" :space-evenly false
+       :vexpand {vexpand ?: false}
+    (children)))
+
+(defwidget iconbtn [icon onclick ?class]
+  (button :class "iconbtn ${class ?: ''}" :onclick onclick icon))
+
+;; ── left column ─────────────────────────────────────────────
+
+;; No time here on purpose: the bar's clock is the clock. This card carries
+;; the greeting and the date only, so nothing on screen is duplicated.
+(defwidget headercard []
+  (tile :class "headercard"
+    (label :class "greeting" :halign "start" :text "Good ${greeting}, Nithin")
+    (label :class "date" :halign "start" :text clock_date)))
+
+(defwidget slidertile [icon value onchange label]
+  (tile :class "slidertile"
+    (box :space-evenly false
+      (label :class "tileicon" :text icon)
+      (label :class "tilelabel" :hexpand true :halign "start" :text label)
+      (label :class "tilevalue" :text "${value}%"))
+    (scale :class "slider" :value {value == "" ? 0 : value} :min 0 :max 101 :onchange onchange)))
+
+(defwidget statring [label value ?sub]
+  (box :class "statring" :orientation "v" :space-evenly false :halign "center"
+    (circular-progress :class "ring" :value value :thickness 4
+                       :start-at 75 :width 52 :height 52
+      (label :class "ringval" :text "${value}%"))
+    (label :class "statlabel" :text label)
+    (label :class "statsub" :text {sub ?: ""})))
+
+(defwidget toggletile [icon label sub on cmd]
+  (button :class "toggle ${on ? 'on' : ''}" :onclick cmd
+    (box :space-evenly false
+      (label :class "toggleicon" :text icon)
+      (box :orientation "v" :space-evenly false :hexpand true :valign "center"
+        (label :class "togglelabel" :halign "start" :text label)
+        (label :class "togglesub"   :halign "start" :limit-width 14 :text sub)))))
+
+(defwidget radiocard []
+  (box :class "radios" :space-evenly true
+    (toggletile :icon "󰖩" :label "Wi-Fi" :sub {radios.wifiname}
+                :on {radios.wifi} :cmd "~/.config/eww/scripts/radio_click.sh wifi")
+    (toggletile :icon "󰂯" :label "Bluetooth" :sub {radios.btname}
+                :on {radios.bt} :cmd "~/.config/eww/scripts/radio_click.sh bt")))
+
+(defwidget netrow [title sub active cmd]
+  (button :class "netrow ${active ? 'on' : ''}" :onclick cmd
+    (box :space-evenly false
+      (label :class "netdot ${active ? 'on' : ''}" :text "󰄯")
+      (box :orientation "v" :space-evenly false :hexpand true :valign "center"
+        (label :class "netname" :halign "start" :limit-width 22 :text title)
+        (label :class "netsub"  :halign "start" :text sub)))))
+
+(defwidget netcard []
+  (revealer :transition "slidedown" :duration "180ms" :reveal {netpanel != ""}
+    (tile :class "netcard"
+      (box :class "nethead" :space-evenly false
+        (label :class "nettitle" :hexpand true :halign "start"
+               :text {netpanel == "wifi" ? "Networks" : "Devices"})
+        (button :class "netclose"
+                :onclick "eww update netpanel='' netask='' netpass=''" "󰅖"))
+
+      ;; Password is asked for inline, only for the network that needs one.
+      (revealer :transition "slidedown" :duration "150ms" :reveal {netask != ""}
+        (box :class "netaskrow" :space-evenly false
+          (label :class "netasklabel" :limit-width 12 :text {netask})
+          (input :class "netpassentry" :hexpand true :password true :value netpass
+                 :onaccept "~/.config/eww/scripts/net_connect.sh wifi '${netask}' '{}'")))
+
+      (box :class "netscroll" :orientation "v" :space-evenly false :valign "start"
+        (box :orientation "v" :space-evenly false :valign "start"
+          (for n in {jq(netlist, '.[0:6]')}
+            (netrow :title {netpanel == "wifi" ? n.ssid : n.name}
+                    :sub {netpanel == "wifi"
+                            ? "${n.signal}%${n.secure ? ' · secured' : ''}${n.known ? ' · saved' : ''}"
+                            : (n.connected ? "connected" : "paired")}
+                    :active {netpanel == "wifi" ? n.active : n.connected}
+                    :cmd {netpanel == "wifi"
+                            ? "~/.config/eww/scripts/net_connect.sh wifi '${n.ssid}'"
+                            : "~/.config/eww/scripts/net_connect.sh bt '${n.mac}' '${n.name}'"})))))))
+
+(defwidget syscard []
+  (tile :class "syscard" :vexpand true
+    (box :class "syshead" :space-evenly false
+      (label :class "systitle" :hexpand true :halign "start" :text "System")
+      (label :class "sysup" :text {sys.up}))
+    (box :class "rings" :space-evenly true :vexpand true :valign "center"
+      (statring :label "CPU"  :value {sys.cpu})
+      (statring :label "RAM"  :value {sys.mem} :sub {sys.memtext})
+      (statring :label "Disk" :value {sys.disk}))))
+
+(defwidget leftcol []
+  (box :class "col left" :orientation "v" :space-evenly false
+    (headercard)
+    (slidertile :icon "󰕾" :label "Volume" :value {muted == "true" ? 0 : volume}
+                :onchange "pamixer --unmute --set-volume {}")
+    (slidertile :icon "󰃞" :label "Brightness" :value bright
+                :onchange "brightnessctl -q set {}%")
+    (radiocard)
+    (netcard)
+    (syscard)))
+
+;; ── centre column : the calendar ────────────────────────────
+
+(defwidget calcard []
+  (box :class "col center" :orientation "v" :space-evenly false
+    (tile :class "calcard"
+      (box :class "calhead" :space-evenly false
+        (label :class "calmonth" :hexpand true :halign "start" :text {cal.title})
+        (button :class "calnav" :onclick "~/.config/eww/scripts/cal_nav.sh -1" "󰅁")
+        (button :class "calnav" :onclick "~/.config/eww/scripts/cal_nav.sh reset" "󰸗")
+        (button :class "calnav" :onclick "~/.config/eww/scripts/cal_nav.sh 1" "󰅂"))
+      (box :class "caldays" :space-evenly true
+        (for d in '["S","M","T","W","T","F","S"]'
+          (label :class "dayname" :text d)))
+      (box :class "calgrid" :orientation "v" :space-evenly false
+        (for week in {cal.weeks}
+          (box :class "calweek" :space-evenly true
+            (for c in week
+              ;; Clicking a day arms it as the due date for the next todo;
+              ;; clicking it again disarms it.
+              (button :class "cell ${c.today ? 'today' : ''} ${c.dim ? 'dim' : ''} ${todo_date == c.iso ? 'picked' : ''} ${jq(todos, '[.[] | select(.done == false and .due == \"' + c.iso + '\")] | length') != '0' ? 'hasdue' : ''}"
+                      :onclick "eww update todo_date='${todo_date == c.iso ? '' : c.iso}'"
+                {c.label}))))))
+    (todocard)))
+
+(defwidget todocard []
+  (tile :class "todocard" :vexpand true
+    (label :class "todotitle" :halign "start" :text "Todo")
+
+    ;; Type straight into the card — Enter files it. No rofi, no popup.
+    ;; The date chip only exists once a day is armed in the calendar. A button
+    ;; that is empty nine times out of ten is just furniture.
+    (box :class "todoinput" :space-evenly false
+      (button :class "datechip" :visible {todo_date != ""}
+              :tooltip "Clear the due date"
+              :onclick "eww update todo_date=''"
+              {todo_date != "" ? "${substring(todo_date, 8, 2)}/${substring(todo_date, 5, 2)}" : ""})
+      ;; Deliberately NOT synced on every keystroke: an `eww update` per
+      ;; character re-applies :value and eats the input. And the due date is
+      ;; read by the script rather than interpolated here, because any prop
+      ;; that changes when you pick a day rebuilds the entry mid-typing.
+      (input :class "todoentry" :hexpand true :value todo_draft
+             :onaccept "~/.config/eww/scripts/todo_add.sh '{}'"))
+
+    (box :class "todoscroll" :orientation "v" :space-evenly false :valign "start" :vexpand true
+      (box :orientation "v" :space-evenly false :valign "start"
+        (for t in {jq(todos, '.[0:6]')}
+          (box :class "todoitem ${t.done ? 'done' : ''}" :space-evenly false
+            (button :class "check ${t.done ? 'on' : ''}" :valign "center"
+                    :onclick "~/.config/eww/scripts/todo_click.sh toggle ${t.id}"
+                    {t.done ? "󰄲" : "󰄱"})
+            (label :class "todotext" :hexpand true :halign "start"
+                   :limit-width 20 :text {t.text})
+            (label :class "duechip ${t.overdue ? 'late' : ''}"
+                   :visible {t.duelabel != ""} :text {t.duelabel})
+            (button :class "tododel"
+                    :onclick "~/.config/eww/scripts/todo_click.sh del ${t.id}" "✕")))
+        (label :class "todoempty" :text "nothing pending"
+               :visible {arraylength(todos) == 0})
+        (label :class "todomore"
+               :visible {arraylength(todos) > 6}
+               :text "+${arraylength(todos) - 6} more")))))
+
+;; ── right column : the music player ─────────────────────────
+
+(defwidget musiccard []
+  (box :class "col right" :orientation "v" :space-evenly false
+    (tile :class "musiccard" :vexpand true
+      ;; The disc is real album art rendered round with a spindle hole, and the
+      ;; ring around it is the track position — so the CD doubles as a gauge.
+      (box :class "arthold" :halign "center"
+        (circular-progress :class "cdring" :value {music.progress}
+                           :thickness 4 :start-at 75 :width 282 :height 282
+          ;; `spin` must sit at the top level of this string. Wrapping it inside a
+          ;; ternary made eww track only `music` as the dependency, so the disc
+          ;; repainted once a second with the poll instead of every frame — which
+          ;; is what the stutter actually was. The "is the set finished" check
+          ;; lives in spin.sh now, which simply holds at 0 until it is.
+          (image :class "cd" :path "${music.cddir}/f${spin}.png"
+                 :visible {music.cddir != ""}
+                 :image-width 264 :image-height 264)))
+      (label :class "track" :halign "start" :limit-width 26 :text {music.title})
+      (label :class "artist" :halign "start" :limit-width 30
+             :text {music.artist != "" ? music.artist : music.player})
+      (scale :class "seek" :value {music.progress} :min 0 :max 101
+             :onchange "~/.config/eww/scripts/player.sh position $(echo '${music.length} * {} / 100' | bc)")
+      (box :class "times"
+        (label :class "t" :halign "start" :hexpand true :text {music.elapsed})
+        (label :class "t" :halign "end" :text {music.total}))
+      (box :class "controls" :halign "center" :space-evenly false
+        (iconbtn :icon "󰒮" :onclick "~/.config/eww/scripts/player.sh previous")
+        (iconbtn :class "play" :icon {music.status == "Playing" ? "" : ""}
+                 :onclick "~/.config/eww/scripts/player.sh play-pause")
+        (iconbtn :icon "󰒭" :onclick "~/.config/eww/scripts/player.sh next")))
+    (actionscard)))
+
+;; identity card — puts the machine's own logo on the desktop
+(defwidget footerbar []
+  (box :class "footer" :space-evenly false :valign "center"
+    (label :class "distrologo" :text "")
+    (label :class "footname" :text {about.distro})
+    (label :class "footsep"  :text "·")
+    (label :class "footline" :text {about.kernel})
+    (label :class "footsep"  :text "·")
+    (label :class "footline" :text "${about.pkgs} packages")
+    (label :class "footline" :hexpand true :halign "end"
+           :text "up ${sys.up}")))
+
+;; quick actions — everything here is a tool already on this machine
+(defwidget action [icon tip cmd]
+  (button :class "action" :tooltip tip
+          :onclick "~/.config/eww/scripts/toggle.sh close; ${cmd}" icon))
+
+(defwidget actionscard []
+  (tile :class "actionscard"
+    (box :class "actions" :space-evenly true
+      ;; Recording is a toggle, not a fire-and-forget: it stays lit while
+      ;; wf-recorder runs and the same button stops it and saves the clip.
+      (button :class "action rec ${recording == 'on' ? 'live' : ''}"
+              :tooltip {recording == "on" ? "Stop recording" : "Record screen"}
+              :onclick "~/.config/eww/scripts/record.sh toggle"
+              {recording == "on" ? "󰩻" : "󰕧"})
+      (action :icon "󰄀" :tip "Screenshot region" :cmd "grimblast copysave area")
+      ;; Do-not-disturb, in place of the colour picker: a state you need to
+      ;; see and reverse, which is what this row is for.
+      (button :class "action ${dnd == 'true' ? 'live' : ''}"
+              :tooltip {dnd == "true" ? "Notifications paused — resume" : "Do not disturb"}
+              :onclick "dunstctl set-paused toggle"
+              {dnd == "true" ? "󰂛" : "󰂚"})
+      (action :icon "󰌾" :tip "Lock"              :cmd "hyprctl dispatch exec hyprlock")
+      (action :icon "󰐥" :tip "Power menu"        :cmd "hyprctl dispatch exec wlogout"))))
+
+;; ── window ──────────────────────────────────────────────────
+
+(defwidget dashboard []
+  (box :class "shell" :orientation "v" :space-evenly false
+    (box :class "panel" :orientation "v" :space-evenly false
+      (box :class "cols" :space-evenly false
+        (leftcol)
+        (calcard)
+        (musiccard))
+      (footerbar))))
+
+;; One full-screen window, not two layers: a separate backdrop layer never
+;; received pointer events, so clicking outside did nothing. Here the slab
+;; floats on top of a transparent full-size button, and every click lands in
+;; the same surface — on the slab it hits the widget, anywhere else it closes.
+(defwindow dashboard
+  :monitor 0
+  :stacking "overlay"
+  :focusable true          ;; so the todo entry can take keystrokes
+  :geometry (geometry :x "0" :y "0" :width "100%" :height "100%")
+  (overlay
+    ;; A pointer-only catcher. This used to be a button, and because the window
+    ;; holds keyboard focus for the todo entry, GTK let Enter or Space activate
+    ;; it — the panel closed itself a second after opening, and every keystroke
+    ;; meant for it went into that activation instead.
+    (eventbox :onclick "~/.config/eww/scripts/toggle.sh close"
+      (box :class "backdrop"))
+    ;; A GtkBox has no window of its own, so clicks on the slab's own padding
+    ;; and on the gaps between cards fell straight through to the catcher
+    ;; underneath and closed the panel. This eventbox swallows them.
+    (eventbox :onclick "true" :valign "start" :halign "center"
+      (dashboard))))
