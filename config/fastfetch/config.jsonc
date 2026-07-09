@@ -19,10 +19,10 @@
     "separator": "  ",
     "brightColor": true,
     "color": {
-      "keys": "31",
-      "title": "31",
-      "separator": "31",
-      "output": "31"
+      "keys": "bright_white",
+      "title": "bright_white",
+      "separator": "bright_white",
+      "output": "bright_white"
     }
   },
   "modules": [
