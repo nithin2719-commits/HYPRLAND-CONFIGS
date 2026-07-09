@@ -17,7 +17,7 @@
   },
   "display": {
     "separator": "  ",
-    "brightColor": false,
+    "brightColor": true,
     "color": {
       "keys": "31",
       "title": "31",
