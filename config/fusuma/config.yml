@@ -28,3 +28,14 @@ pinch:
       command: 'wtype -M ctrl -k minus -m ctrl'
     out:
       command: 'wtype -M ctrl -k equal -m ctrl'
+  swipe: 0.1
+  hold: 0.3
+  pinch: 0.05
+threshold:
+  swipe: 0.5
+  hold: 0.7
+  pinch: 0.3
+interval:
+  swipe: 0.8
+  hold: 0.5
+  pinch: 0.4
