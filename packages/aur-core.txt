@@ -1,0 +1,24 @@
+# AUR packages the rice actually uses.  Install with:  yay -S --needed - < packages/aur-core.txt
+# (packages/aur.txt is the complete foreign-package dump from this machine, for reference)
+
+asusctl
+supergfxctl
+auto-cpufreq
+eww
+wlogout
+ruby-fusuma
+gestures
+libinput-gestures
+hyde-cli-git
+grimblast-git
+swaylock-effects-git
+swayosd-git
+zsh-theme-powerlevel10k-git
+oh-my-zsh-git
+illogical-impulse-bibata-modern-classic-bin
+ttf-orbitron
+papirus-folders-git
+pokemon-colorscripts-git
+spicetify-cli
+google-chrome
+visual-studio-code-bin
