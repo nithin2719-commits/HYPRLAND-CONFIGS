@@ -1,0 +1,113 @@
+# Core packages for the rice, all from core/extra/multilib.
+# Install with:  sudo pacman -S --needed - < packages/rice-core.txt
+# Lines starting with # and blank lines are ignored by install.sh.
+
+# ── compositor + session ────────────────────────────────────────────────
+hyprland
+hyprlock
+hypridle
+hyprpicker
+hyprcursor
+xdg-desktop-portal-hyprland
+polkit-kde-agent
+qt5-wayland
+qt6-wayland
+
+# ── bar, notifications, launcher, logout ────────────────────────────────
+waybar
+dunst
+swaync
+rofi
+wofi
+
+# ── wallpaper (Arch ships the swww fork as `awww`) ──────────────────────
+awww
+
+# ── terminal, files, browser ────────────────────────────────────────────
+kitty
+thunar
+thunar-archive-plugin
+thunar-volman
+tumbler
+gvfs
+gvfs-mtp
+firefox
+
+# ── screenshot / screen capture / clipboard ─────────────────────────────
+grim
+slurp
+swappy
+wf-recorder
+wl-clipboard
+cliphist
+
+# ── audio ───────────────────────────────────────────────────────────────
+pipewire
+pipewire-alsa
+pipewire-audio
+pipewire-jack
+pipewire-pulse
+wireplumber
+pavucontrol
+pamixer
+playerctl
+easyeffects
+
+# ── system monitors / fetch / visualiser ────────────────────────────────
+btop
+htop
+fastfetch
+cava
+
+# ── theming ─────────────────────────────────────────────────────────────
+qt5ct
+qt6ct
+kvantum
+nwg-look
+gtk3
+gtk4
+gnome-themes-extra
+papirus-icon-theme
+
+# ── fonts ───────────────────────────────────────────────────────────────
+ttf-jetbrains-mono-nerd
+ttf-fira-code
+noto-fonts
+noto-fonts-emoji
+woff2-font-awesome
+
+# ── hardware control ────────────────────────────────────────────────────
+brightnessctl
+power-profiles-daemon
+udiskie
+network-manager-applet
+blueman
+openrgb
+
+# ── nvidia (Optimus laptop; drop these on an AMD/Intel-only machine) ────
+nvidia-open-dkms
+nvidia-utils
+nvidia-settings
+egl-wayland
+libva-nvidia-driver
+
+# ── shell + cli ─────────────────────────────────────────────────────────
+zsh
+starship
+eza
+bat
+fzf
+ripgrep
+fd
+jq
+7zip
+unzip
+imagemagick
+ffmpeg
+ruby
+python-pillow
+python-gobject
+python-requests
+libnotify
+xdg-user-dirs
+xdg-utils
