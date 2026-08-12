@@ -12,7 +12,7 @@ hand‑written notification theme, an eww dashboard, and ROG laptop hardware con
 [![Wayland](https://img.shields.io/badge/Wayland-FFBC00?style=for-the-badge&logo=wayland&logoColor=black)](https://wayland.freedesktop.org)
 [![License](https://img.shields.io/badge/License-MIT-9b9ba4?style=for-the-badge)](LICENSE)
 
-<img src="assets/desktop.png" alt="The desktop: fastfetch, btop and cava tiled under the graphite Waybar" width="100%">
+<img src="assets/dashboard.png" alt="The eww dashboard open over the desktop: calendar, todo board, system meters and a spinning album disc, with cava below" width="100%">
 
 </div>
 
@@ -67,20 +67,53 @@ value.
 
 ## Gallery
 
-**The bar** — launcher · workspaces · window title | clock | now‑playing · status group
+### The dashboard
+
+Dropped from the clock with `SUPER` `D`. Greeting, volume and brightness
+sliders, network and bluetooth chips, CPU/RAM/disk meters, a month calendar, a
+todo board — and an album disc that actually spins, rendered frame by frame
+from the current track's cover art by
+[`disc_spin.py`](config/eww/scripts/disc_spin.py).
+
+<img src="assets/dashboard.png" alt="The eww dashboard: greeting, sliders, system meters, calendar, todo board and a spinning album disc" width="100%">
+
+### The terminal
+
+kitty at 82 % opacity, zsh with Powerlevel10k, a graphite fastfetch card on
+every new shell.
+
+<img src="assets/terminal.png" alt="kitty running fastfetch, a git log and eza with icons" width="100%">
+
+### The desktop
+
+Terminal, btop and cava tiled under the bar. Gaps are 2/4 and the border is
+3px — the focused window is the only bright edge on screen.
+
+<img src="assets/desktop.png" alt="Terminal, btop and cava tiled under the graphite Waybar" width="100%">
+
+### The BlackArch toolbox
+
+A two‑level rofi menu over an index of **4309 runnable tools**, categorised.
+`ALT` `S`. A tool with a GUI opens its GUI; a CLI tool opens a themed terminal
+showing its usage and flags before dropping into a shell scoped to it.
+Red‑on‑black on purpose — the one part of the desktop that is allowed colour,
+because it is a different mode of working.
+
+<img src="assets/toolbox.png" alt="The BlackArch launcher: a categorised rofi menu over 4309 tools" width="100%">
+
+### The bar
+
+launcher · workspaces · window title | clock | now‑playing · status group
 
 <img src="assets/waybar.png" alt="The graphite Waybar" width="100%">
 
 <table>
 <tr>
-<td width="60%"><img src="assets/launcher.png" alt="rofi application launcher"></td>
-<td width="40%"><img src="assets/notification.png" alt="A graphite dunst notification card"><br><br>
-<sub><b>Notifications</b> — dunst, restyled as frosted cards. The compositor
-supplies the blur and the slide‑in; dunst itself can't animate.</sub></td>
-</tr>
-<tr>
-<td><sub><b>Launcher</b> — rofi, HyDE <code>style_2</code>, blurred layer surface.</sub></td>
-<td></td>
+<td width="46%"><img src="assets/notification.png" alt="A graphite dunst notification card"></td>
+<td width="54%"><sub><b>Notifications</b> — dunst, restyled as frosted cards
+that slide in from the right. dunst cannot animate and cannot blur, so both
+come from compositor <code>layerrule</code>s in
+<a href="config/hypr/windowrules.conf">windowrules.conf</a>.</sub></td>
 </tr>
 </table>
 
