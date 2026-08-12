@@ -14,6 +14,7 @@ primary source; this file collects them.
 - [Borders are rainbow / borders are dead](#borders-are-rainbow--borders-are-dead)
 - [Touchpad gestures do nothing](#touchpad-gestures-do-nothing)
 - [Audio and volume](#audio-and-volume)
+- [The terminal is slow to become usable](#the-terminal-is-slow-to-become-usable)
 - [The eww dashboard is stuck](#the-eww-dashboard-is-stuck)
 - [Slow first launch of a browser app](#slow-first-launch-of-a-browser-app)
 - [Getting back to a clean state](#getting-back-to-a-clean-state)
@@ -285,6 +286,116 @@ Master to full so PipeWire owns the actual level. Remove that `exec-once` if it
 fights your setup.
 
 ---
+
+## The terminal is slow to become usable
+
+**Symptom:** you open kitty, the fastfetch card paints straight away, but for
+about another tenth of a second nothing you type actually runs.
+
+**Cause:** zsh cannot execute anything until `.zshrc` has finished, and this rc
+is expensive. Cold-cache breakdown of `zsh -i`, roughly 117 ms:
+
+| Cost | What |
+|---|---|
+| 65 ms | `powerlevel10k.zsh-theme` |
+| 21 ms | `zsh-syntax-highlighting` |
+| 11 ms | `.p10k.zsh` — 95 KB, reparsed every shell |
+| 8 ms | `zsh-autosuggestions` |
+| 8 ms | `fastfetch` |
+| 4 ms | bare `zsh -f` |
+
+**fastfetch is not the problem.** It is the visible thing at the top of the file
+so it gets blamed, and it costs 8 ms. Leave it alone.
+
+**Fix — compile the big files.** zsh will read a `.zwc` bytecode file instead of
+reparsing the script, but only when the `.zwc` sits beside the source and is
+newer. `.p10k.zsh` is yours, so it compiles in place. The plugins live under
+`/usr/share`, which is root-owned, so compiled copies go in the cache and are
+refreshed whenever pacman updates the originals:
+
+| File | Before | After |
+|---|---|---|
+| `.p10k.zsh` | 11 ms | 3.6 ms |
+| `zsh-syntax-highlighting` | 11.6 ms | 5.4 ms |
+| `zsh-autosuggestions` | 3.7 ms | 2.9 ms |
+
+**Measured, 20 interleaved runs each: 86 ms → 74 ms median** to run a command
+typed the instant the shell spawns. See the `_zsrc` helper and the `zcompile`
+guard in `.zshrc`.
+
+That is a 1.16× improvement, not a transformation. Be suspicious of bigger
+numbers — including ones you measure yourself on the first try. A single cold
+run of the old config reported 141 ms and made the change look like 1.9×; once
+the page cache was warm and the two configs were measured alternately, the real
+gap was 12 ms.
+
+> **On `POWERLEVEL9K_INSTANT_PROMPT`:** it is enabled here, but be honest about
+> what it buys. It makes p10k paint a cached prompt at ~5 ms instead of ~10 ms.
+> It does **not** make the shell execute anything sooner — that still waits for
+> the whole rc. On this setup fastfetch already paints at ~10 ms, so the screen
+> is never blank and the measurable gain is close to nothing. Compiling is what
+> actually helped, and even that is modest.
+
+### The shell is not where the time goes
+
+If opening a terminal feels slow, measure the terminal before blaming the rc.
+On this machine, from keypress to a shell that will run a command:
+
+| Cost | What |
+|---|---|
+| ~260 ms | kitty's own process start and window creation |
+| ~100 ms | kitty's zsh shell integration |
+| ~74 ms | `.zshrc` |
+
+The rc is the smallest of the three. `shell_integration=disabled` in
+`kitty.conf` removes the middle one, at the cost of prompt marks, cursor
+shaping and `cwd` reporting.
+
+For a genuinely instant terminal the lever is not the rc at all — it is
+reusing one kitty process instead of starting a new one per window
+(`single_instance yes` plus a `listen_on` socket, with `allow_remote_control`
+already enabled here). That is **untested on this setup**; measure it before
+trusting it.
+
+> Timing kitty by wrapping the whole `kitty …` invocation is unreliable —
+> window creation contends with the compositor and launching several in a loop
+> produced readings from 400 ms to 5 s for the same configuration. Set a
+> timestamp in the environment before launching and have the shell print the
+> delta from inside.
+
+**Two gotchas if you write your own loader:**
+
+- Never pick the fallback from `source`'s exit status
+  (`source $cached || source $system`). A plugin whose last statement returns
+  non-zero gets sourced *twice*, doubling both the cost and the registered
+  hooks. Choose the file first, then source it once.
+- `typeset -U path PATH` near the top. This rc appends to `PATH` in a dozen
+  places without checking; it had grown to 42 entries, 13 of them duplicates,
+  and every failed command lookup walks the whole list. Now 26, none repeated.
+
+**Measure it yourself.** A wall-clock timer around `zsh -i -c exit` tells you
+almost nothing, because it does not measure when the shell became *interactive*.
+Spawn a pty, type immediately, and time until the command actually runs:
+
+```bash
+python3 - <<'PY'
+import os, pty, time, select
+pid, fd = pty.fork()
+if pid == 0:
+    os.environ["TERM"] = "xterm-256color"; os.execvp("zsh", ["zsh", "-i"])
+start, buf = time.perf_counter(), b""
+os.write(fd, b"ZZMARK\r")
+while time.perf_counter() - start < 8:
+    r, _, _ = select.select([fd], [], [], 0.02)
+    if not r: continue
+    d = os.read(fd, 65536)
+    if not d: break
+    buf += d
+    if b"command not found" in buf:
+        print(f"usable in {(time.perf_counter()-start)*1000:.0f} ms"); break
+os.write(fd, b"exit\n"); os.close(fd); os.waitpid(pid, 0)
+PY
+```
 
 ## The eww dashboard is stuck
 
