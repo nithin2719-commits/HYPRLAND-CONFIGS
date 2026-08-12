@@ -61,9 +61,18 @@
       "format": "{used} / {total}"
     },
     {
+      // {name:19}, not {name}. The full string is "Geforce RTX 3070 Ti Laptop
+      // GPU" -- 30 chars, which made this the longest line in the block at 79
+      // columns. The logo is 38 wide plus 6 of padding, so anything under 80
+      // columns wrapped the tail onto column 0 and the fragment "p GPU" landed
+      // under the logo, breaking the alignment in any tiled terminal.
+      //
+      // Truncating to 19 keeps "Geforce RTX 3070 Ti" and drops the redundant
+      // "Laptop GPU" suffix. The longest line is now the memory row at 28, so
+      // the whole block fits in 72 columns.
       "type": "gpu",
       "key": "gpu",
-      "format": "{name}",
+      "format": "{name:19}",
       "hideType": "integrated"
     },
     {
