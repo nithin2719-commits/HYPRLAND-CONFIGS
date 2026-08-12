@@ -21,7 +21,7 @@ hand‑written notification theme, an eww dashboard, and ROG laptop hardware con
 ## Table of contents
 
 - [What this is](#what-this-is)
-- [Gallery](#gallery)
+- [The dashboard](#the-dashboard)
 - [The stack](#the-stack)
 - [Install](#install)
   - [One command](#one-command)
@@ -65,9 +65,7 @@ value.
 
 ---
 
-## Gallery
-
-### The dashboard
+## The dashboard
 
 Dropped from the clock with `SUPER` `D`. Greeting, volume and brightness
 sliders, network and bluetooth chips, CPU/RAM/disk meters, a month calendar, a
@@ -75,45 +73,10 @@ todo board — and an album disc that actually spins, rendered frame by frame
 from the current track's cover art by
 [`disc_spin.py`](config/eww/scripts/disc_spin.py).
 
+Behind it: the graphite Waybar, kitty at 82 % opacity running the fastfetch
+card, and cava.
+
 <img src="assets/dashboard.png" alt="The eww dashboard: greeting, sliders, system meters, calendar, todo board and a spinning album disc" width="100%">
-
-### The terminal
-
-kitty at 82 % opacity, zsh with Powerlevel10k, and a graphite fastfetch card
-on every new shell — the BlackArch lockup in white, system on the right,
-nothing else.
-
-<img src="assets/terminal.png" alt="A fullscreen kitty window showing the graphite fastfetch card" width="100%">
-
-### The BlackArch toolbox
-
-A two‑level rofi menu over an index of **4309 runnable tools**, categorised.
-`ALT` `S`. A tool with a GUI opens its GUI; a CLI tool opens a themed terminal
-showing its usage and flags before dropping into a shell scoped to it.
-Red‑on‑black on purpose — the one part of the desktop that is allowed colour,
-because it is a different mode of working.
-
-<img src="assets/toolbox.png" alt="The BlackArch launcher: a categorised rofi menu over 4309 tools" width="100%">
-
-### The bar
-
-launcher · workspaces · window title | clock | now‑playing · status group
-
-<img src="assets/waybar.png" alt="The graphite Waybar" width="100%">
-
-<table>
-<tr>
-<td width="46%"><img src="assets/notification.png" alt="A graphite dunst notification card"></td>
-<td width="54%"><sub><b>Notifications</b> — dunst, restyled as frosted cards
-that slide in from the right. dunst cannot animate and cannot blur, so both
-come from compositor <code>layerrule</code>s in
-<a href="config/hypr/windowrules.conf">windowrules.conf</a>.</sub></td>
-</tr>
-</table>
-
-**Wallpaper** — `Vanta Black` (one of 30 HyDE themes shipped in `config/hyde/themes/`)
-
-<img src="assets/wallpaper.jpg" alt="Wallpaper preview" width="100%">
 
 ---
 
@@ -357,7 +320,7 @@ See [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) for the full list.
 HYPRLAND-CONFIGS/
 ├── install.sh                  ← bootstrap: packages, configs, services
 ├── README.md
-├── assets/                     ← the screenshots in this file
+├── assets/                     ← the screenshot in this file
 ├── docs/
 │   ├── KEYBINDINGS.md          ← every bind, grouped
 │   └── TROUBLESHOOTING.md      ← known breakages and their fixes
