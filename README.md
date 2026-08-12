@@ -79,17 +79,11 @@ from the current track's cover art by
 
 ### The terminal
 
-kitty at 82 % opacity, zsh with Powerlevel10k, a graphite fastfetch card on
-every new shell.
+kitty at 82 % opacity, zsh with Powerlevel10k, and a graphite fastfetch card
+on every new shell — the BlackArch lockup in white, system on the right,
+nothing else.
 
-<img src="assets/terminal.png" alt="kitty running fastfetch, a git log and eza with icons" width="100%">
-
-### The desktop
-
-Terminal, btop and cava tiled under the bar. Gaps are 2/4 and the border is
-3px — the focused window is the only bright edge on screen.
-
-<img src="assets/desktop.png" alt="Terminal, btop and cava tiled under the graphite Waybar" width="100%">
+<img src="assets/terminal.png" alt="A fullscreen kitty window showing the graphite fastfetch card" width="100%">
 
 ### The BlackArch toolbox
 
