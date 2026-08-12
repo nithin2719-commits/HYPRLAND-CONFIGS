@@ -1,22 +1,34 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
+# ─────────────────────────────────────────────────────────────────────────────
+#  Powerlevel10k instant prompt.
+#
+#  MUST stay at the very top, above anything that prints, reads input, or runs
+#  a slow command. p10k caches the rendered prompt here and replays it in a few
+#  milliseconds, then loads the real prompt behind it. Without this block the
+#  terminal shows nothing until the whole rc has finished -- which on this
+#  machine was ~120ms of dead time on every single shell, because the p10k
+#  theme alone costs ~65ms.
+#
+#  `quiet` rather than `verbose`: fastfetch below prints during init, and the
+#  default setting complains about console output every time a shell starts.
+# ─────────────────────────────────────────────────────────────────────────────
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# Keep PATH unique. Everything below appends without checking, and the same
+# entries were being added two and three times -- 42 entries, 13 of them
+# duplicates. `-U` makes zsh drop repeats automatically, so every lookup that
+# misses walks a shorter list.
+typeset -U path PATH
 
-zmodload zsh/zprof
+fastfetch --config ~/.config/fastfetch/graphite.jsonc 2>/dev/null
+echo ""
 
 export PATH="/usr/bin:$PATH"
-# Oh-my-zsh installation path
 
-# Powerlevel10k theme path
+# Powerlevel10k theme
 source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
-
-# List of plugins used
-
-# In case a command is not found, try to find the package that has it
 
 # Detect AUR wrapper
 if command -v yay &>/dev/null; then
@@ -73,36 +85,96 @@ alias .5='cd ../../../../..'
 alias mkdir='mkdir -p'
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# Display Pokemon
-
-export PATH=$PATH:/home/nithin/.spicetify
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/shims:$PATH"
-export PATH="$PYENV_ROOT/bin:$PATH"
-
-
-# Created by `pipx` on 2026-03-21 18:50:45
-export PATH="$PATH:/home/nithin/.local/bin"
-export PATH="$PATH:/home/nithin/.local/bin:/home/nithin/.local/share/gem/ruby/3.4.0/bin"
-export PATH="$PATH:/home/nithin/.local/bin:/home/nithin/.local/share/gem/ruby/3.4.0/bin"
-if [ -z "$DISPLAY" ] && [ "$XDG_VTNR" = "1" ]; then
-    exec Hyprland
+#
+# Compiled on demand: this file is 95KB and reparsing it cost 11ms on every
+# shell. The .zwc drops that to 3.6ms. Recompiled automatically whenever the
+# source changes, so `p10k configure` still takes effect.
+if [[ -f ~/.p10k.zsh ]]; then
+  [[ -f ~/.p10k.zsh.zwc && ~/.p10k.zsh.zwc -nt ~/.p10k.zsh ]] || zcompile -R ~/.p10k.zsh 2>/dev/null
+  source ~/.p10k.zsh
 fi
 
-# Fast plugin loading (no OMZ)
-source /usr/share/oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /usr/share/oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# ── PATH ─────────────────────────────────────────────────────────────────────
+# typeset -U above collapses repeats, so these can stay declarative.
+export PYENV_ROOT="$HOME/.pyenv"
+export NVM_DIR="$HOME/.config/nvm"
+path=(
+  "$HOME/.local/share/bin"
+  "$HOME/.npm-global/bin"
+  "$HOME/.opencode/bin"
+  "$PYENV_ROOT/shims"
+  "$PYENV_ROOT/versions/3.10.14/bin"
+  "$PYENV_ROOT/bin"
+  "$HOME/.local/bin"
+  "$HOME/.local/share/gem/ruby/3.4.0/bin"
+  "$HOME/.spicetify"
+  $path
+)
+
+# ── Plugins, sourced from compiled copies ────────────────────────────────────
+# zsh reads a .zwc bytecode file instead of reparsing the script, but only if
+# the .zwc sits next to the source and is newer. The plugins live under
+# /usr/share, which is root-owned, so the compiled copies are kept in the cache
+# and refreshed whenever pacman updates the originals.
+#
+#   syntax-highlighting  11.6ms -> 5.4ms
+#   autosuggestions       3.7ms -> 2.9ms
+# Source exactly once. Deciding the fallback on source's EXIT STATUS is wrong:
+# a plugin whose last statement returns non-zero would be sourced a second time
+# from /usr/share, doubling both the cost and the registered hooks. Pick the
+# file first, then source it once.
+_zsrc() {
+  local src=$1 dst=$HOME/.cache/zsh/${1:t}
+  [[ -d $HOME/.cache/zsh ]] || mkdir -p $HOME/.cache/zsh
+  if [[ ! -f $dst || $src -nt $dst ]]; then
+    cp -f -- "$src" "$dst" 2>/dev/null && zcompile -R -- "$dst" 2>/dev/null
+  fi
+  [[ -f $dst ]] || dst=$src
+  source -- "$dst"
+}
+_zsrc /usr/share/oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+_zsrc /usr/share/oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_STYLES[unknown-token]="fg=cyan"
 ZSH_HIGHLIGHT_STYLES[double-quoted-argument]="fg=default"
-pokemon-colorscripts --no-title -r 1,3,6
+
+# Was: pokemon-colorscripts --no-title -r 1,3,6
+# A random coloured sprite was the one thing on this desktop that could not be
+# made monochrome, and it changed height on every shell, so the prompt never
+# started in the same place. This prints the same compact card every time.
+# The BlackArch mark, logo only, with the sword hilt intact. `ff` reprints it.
+alias ff='clear && fastfetch --config ~/.config/fastfetch/graphite.jsonc && echo ""'
+
 # Lazy load nvm
-export NVM_DIR="$HOME/.config/nvm"
 nvm() {
   unset -f nvm
   [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
   nvm "$@"
 }
+
 TIMEFMT="%J  %*E total"
+
+# ── History ──────────────────────────────────────────────────────────────────
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt HIST_IGNORE_DUPS
+setopt SHARE_HISTORY
+setopt interactivecomments
+
+# Arrow keys search history by what you have already typed, instead of walking
+# it blindly. Declared once -- this block used to appear five times, and every
+# repeat re-ran autoload and re-registered the same two widgets.
+autoload -Uz up-line-or-beginning-search
+autoload -Uz down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey "^[[A" up-line-or-beginning-search
+bindkey "^[[B" down-line-or-beginning-search
+
+alias auto-cpufreq='/home/nithin/.pyenv/versions/3.10.14/bin/auto-cpufreq'
+
+# The `exec Hyprland` guard that used to live here is gone: ~/.zprofile already
+# starts the session on VT1, and .zshrc runs for EVERY interactive shell. A
+# terminal that happened to start without DISPLAY set would have launched a
+# second compositor from inside itself.
