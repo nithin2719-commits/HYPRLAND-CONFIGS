@@ -111,29 +111,22 @@ path=(
   $path
 )
 
-# ── Plugins, sourced from compiled copies ────────────────────────────────────
-# zsh reads a .zwc bytecode file instead of reparsing the script, but only if
-# the .zwc sits next to the source and is newer. The plugins live under
-# /usr/share, which is root-owned, so the compiled copies are kept in the cache
-# and refreshed whenever pacman updates the originals.
+# ── Plugins ──────────────────────────────────────────────────────────────────
+# Sourced from /usr/share, in place.
 #
-#   syntax-highlighting  11.6ms -> 5.4ms
-#   autosuggestions       3.7ms -> 2.9ms
-# Source exactly once. Deciding the fallback on source's EXIT STATUS is wrong:
-# a plugin whose last statement returns non-zero would be sourced a second time
-# from /usr/share, doubling both the cost and the registered hooks. Pick the
-# file first, then source it once.
-_zsrc() {
-  local src=$1 dst=$HOME/.cache/zsh/${1:t}
-  [[ -d $HOME/.cache/zsh ]] || mkdir -p $HOME/.cache/zsh
-  if [[ ! -f $dst || $src -nt $dst ]]; then
-    cp -f -- "$src" "$dst" 2>/dev/null && zcompile -R -- "$dst" 2>/dev/null
-  fi
-  [[ -f $dst ]] || dst=$src
-  source -- "$dst"
-}
-_zsrc /usr/share/oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-_zsrc /usr/share/oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# Do NOT copy these into a cache directory to zcompile them. zsh-syntax-
+# highlighting finds its highlighters/ subdirectory, .version and
+# .revision-hash relative to its OWN path (${0:A:h}), so a lone copy of the
+# .zsh file cannot see them and the plugin aborts the shell with:
+#
+#   zsh-syntax-highlighting: highlighters directory '...' not found
+#   zsh-syntax-highlighting: failed loading highlighters, exiting.
+#
+# Compiling both saved about 7ms combined. Not worth a broken shell.
+# .p10k.zsh is self-contained and is still compiled above -- that was the
+# bigger win anyway.
+source /usr/share/oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_STYLES[unknown-token]="fg=cyan"
 ZSH_HIGHLIGHT_STYLES[double-quoted-argument]="fg=default"

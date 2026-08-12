@@ -307,27 +307,32 @@ is expensive. Cold-cache breakdown of `zsh -i`, roughly 117 ms:
 **fastfetch is not the problem.** It is the visible thing at the top of the file
 so it gets blamed, and it costs 8 ms. Leave it alone.
 
-**Fix — compile the big files.** zsh will read a `.zwc` bytecode file instead of
-reparsing the script, but only when the `.zwc` sits beside the source and is
-newer. `.p10k.zsh` is yours, so it compiles in place. The plugins live under
-`/usr/share`, which is root-owned, so compiled copies go in the cache and are
-refreshed whenever pacman updates the originals:
+**Partial fix — compile `.p10k.zsh`.** zsh reads a `.zwc` bytecode file instead
+of reparsing the script, but only when the `.zwc` sits beside the source and is
+newer. `.p10k.zsh` is yours and self-contained, so it compiles in place:
+**11 ms → 3.6 ms**. `.zshrc` recompiles it automatically when it changes, so
+`p10k configure` still works.
 
-| File | Before | After |
-|---|---|---|
-| `.p10k.zsh` | 11 ms | 3.6 ms |
-| `zsh-syntax-highlighting` | 11.6 ms | 5.4 ms |
-| `zsh-autosuggestions` | 3.7 ms | 2.9 ms |
+Measured over 16 interleaved runs, that is **108 ms → 100 ms. About 1.08×.**
+Honest answer: tuning this rc is not worth much. The time is elsewhere — see
+below.
 
-**Measured, 20 interleaved runs each: 86 ms → 74 ms median** to run a command
-typed the instant the shell spawns. See the `_zsrc` helper and the `zcompile`
-guard in `.zshrc`.
+> **Do not cache-and-compile the plugins.** It is the obvious next step and it
+> breaks your shell. `zsh-syntax-highlighting` locates its `highlighters/`
+> subdirectory, `.version` and `.revision-hash` relative to its *own* path
+> (`${0:A:h}`). Copy the lone `.zsh` file into `~/.cache/zsh` to compile it and
+> every new shell dies with:
+>
+> ```
+> zsh-syntax-highlighting: highlighters directory '…/.cache/zsh/highlighters' not found
+> zsh-syntax-highlighting: failed loading highlighters, exiting.
+> ```
+>
+> It saved about 7 ms. Source both plugins from `/usr/share`, in place.
 
-That is a 1.16× improvement, not a transformation. Be suspicious of bigger
-numbers — including ones you measure yourself on the first try. A single cold
-run of the old config reported 141 ms and made the change look like 1.9×; once
-the page cache was warm and the two configs were measured alternately, the real
-gap was 12 ms.
+Be suspicious of large improvements here, including ones you measure yourself.
+A single cold run of the old config reported 141 ms and made the change look
+like 1.9×. Warm, interleaved, it was 1.08×.
 
 > **On `POWERLEVEL9K_INSTANT_PROMPT`:** it is enabled here, but be honest about
 > what it buys. It makes p10k paint a cached prompt at ~5 ms instead of ~10 ms.
