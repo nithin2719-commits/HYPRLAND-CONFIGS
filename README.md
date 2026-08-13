@@ -74,9 +74,7 @@ from the current track's cover art by
 [`disc_spin.py`](config/eww/scripts/disc_spin.py).
 
 Behind it: the graphite Waybar, kitty at 82 % opacity running the fastfetch
-card, and cava.
-
-<img src="assets/dashboard.png" alt="The eww dashboard: greeting, sliders, system meters, calendar, todo board and a spinning album disc" width="100%">
+card, and cava. That is the screenshot at the top of this file.
 
 ---
 
